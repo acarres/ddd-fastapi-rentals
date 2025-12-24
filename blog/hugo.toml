@@ -7,3 +7,7 @@ theme = "PaperMod"
 name = "Currso DDD y Python con Fastapi"
 url = "/curso-ddd-fastapi/"
 weight = 1
+
+[params]
+  ShowPostNavLinks = true
+  ShowBreadCrumbs = true

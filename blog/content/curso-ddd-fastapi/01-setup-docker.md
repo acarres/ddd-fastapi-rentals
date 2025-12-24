@@ -3,8 +3,6 @@ title: "Capítulo 1 – Setup profesional desde cero con Docker"
 weight: 1
 ---
 
-# 01 — Setup profesional desde cero con Docker
-
 ## Qué vas a aprender
 
 En este capítulo vas a aprender:
