@@ -1,0 +1,9 @@
+baseURL = "https://acarres.github.io/ddd-fastapi-rentals/"
+languageCode = "es-es"
+title = "DDD + FastAPI Rentals"
+theme = "PaperMod"
+
+[[menu.main]]
+name = "Currso DDD y Python con Fastapi"
+url = "/curso-ddd-fastapi/"
+weight = 1

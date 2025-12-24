@@ -1,3 +1,8 @@
+---
+title: "Capítulo 2 – Entidades y Value Objects"
+weight: 2
+---
+
 # 03 — Entidades y Value Objects
 
 > En este capítulo empezamos a escribir **código**, pero manteniendo una separación estricta entre:

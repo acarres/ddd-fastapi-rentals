@@ -1,3 +1,9 @@
+---
+title: "Curso DDD con FastAPI"
+description: "Curso práctico paso a paso usando ddd-fastapi-rentals"
+---
+
+
 # DDD con Python (apuntes personales)
 
 Estos apuntes son un curso personal en construcción.  

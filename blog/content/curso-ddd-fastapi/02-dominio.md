@@ -1,3 +1,8 @@
+---
+title: "Capítulo 2 – Dominio: pensar antes de programar"
+weight: 2
+---
+
 # 02 — Dominio: pensar antes de programar
 
 ## Qué vas a aprender
