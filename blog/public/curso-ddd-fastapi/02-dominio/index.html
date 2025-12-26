@@ -1,0 +1,399 @@
+<!DOCTYPE html>
+<html lang="en" dir="auto" data-theme="auto">
+
+<head><script src="/ddd-fastapi-rentals/livereload.js?mindelay=10&amp;v=2&amp;port=1313&amp;path=ddd-fastapi-rentals/livereload" data-no-instant defer></script><meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<meta name="robots" content="noindex, nofollow">
+<title>Capítulo 2 – Dominio: pensar antes de programar | Blog de acarres</title>
+<meta name="keywords" content="">
+<meta name="description" content="Qué vas a aprender
+En este capítulo vas a aprender:
+
+Qué significa realmente dominio en Domain-Driven Design
+Por qué el dominio es más importante que el código
+Qué problemas aparecen cuando empezamos programando sin pensar
+Cómo identificar reglas de negocio aunque no seas técnico
+Cómo usar este capítulo como base mental para todo lo que vendrá después
+
+
+Objetivo del capítulo: cambiar la forma en la que piensas un sistema antes de escribir una sola línea de código.">
+<meta name="author" content="">
+<link rel="canonical" href="http://localhost:1313/ddd-fastapi-rentals/curso-ddd-fastapi/02-dominio/">
+<link crossorigin="anonymous" href="/ddd-fastapi-rentals/assets/css/stylesheet.343cc480b9ffc8f04ccbe5e968ad674880cab773ec19905e93033065c1e7a804.css" integrity="sha256-NDzEgLn/yPBMy&#43;XpaK1nSIDKt3PsGZBekwMwZcHnqAQ=" rel="preload stylesheet" as="style">
+<link rel="icon" href="http://localhost:1313/ddd-fastapi-rentals/favicon.ico">
+<link rel="icon" type="image/png" sizes="16x16" href="http://localhost:1313/ddd-fastapi-rentals/favicon-16x16.png">
+<link rel="icon" type="image/png" sizes="32x32" href="http://localhost:1313/ddd-fastapi-rentals/favicon-32x32.png">
+<link rel="apple-touch-icon" href="http://localhost:1313/ddd-fastapi-rentals/apple-touch-icon.png">
+<link rel="mask-icon" href="http://localhost:1313/ddd-fastapi-rentals/safari-pinned-tab.svg">
+<meta name="theme-color" content="#2e2e33">
+<meta name="msapplication-TileColor" content="#2e2e33">
+<link rel="alternate" hreflang="en" href="http://localhost:1313/ddd-fastapi-rentals/curso-ddd-fastapi/02-dominio/">
+<noscript>
+    <style>
+        #theme-toggle,
+        .top-link {
+            display: none;
+        }
+
+    </style>
+    <style>
+        @media (prefers-color-scheme: dark) {
+            :root {
+                --theme: rgb(29, 30, 32);
+                --entry: rgb(46, 46, 51);
+                --primary: rgb(218, 218, 219);
+                --secondary: rgb(155, 156, 157);
+                --tertiary: rgb(65, 66, 68);
+                --content: rgb(196, 196, 197);
+                --code-block-bg: rgb(46, 46, 51);
+                --code-bg: rgb(55, 56, 62);
+                --border: rgb(51, 51, 51);
+                color-scheme: dark;
+            }
+
+            .list {
+                background: var(--theme);
+            }
+
+            .toc {
+                background: var(--entry);
+            }
+        }
+
+        @media (prefers-color-scheme: light) {
+            .list::-webkit-scrollbar-thumb {
+                border-color: var(--code-bg);
+            }
+        }
+
+    </style>
+</noscript>
+<script>
+    if (localStorage.getItem("pref-theme") === "dark") {
+        document.querySelector("html").dataset.theme = 'dark';
+    } else if (localStorage.getItem("pref-theme") === "light") {
+       document.querySelector("html").dataset.theme = 'light';
+    } else if (window.matchMedia('(prefers-color-scheme: dark)').matches) {
+        document.querySelector("html").dataset.theme = 'dark';
+    } else {
+        document.querySelector("html").dataset.theme = 'light';
+    }
+
+</script>
+</head>
+<body id="top">
+    <header class="header">
+    <nav class="nav">
+        <div class="logo">
+            <a href="http://localhost:1313/ddd-fastapi-rentals/" accesskey="h" title="Blog de acarres (Alt + H)">Blog de acarres</a>
+            <div class="logo-switches">
+                <button id="theme-toggle" accesskey="t" title="(Alt + T)" aria-label="Toggle theme">
+                    <svg id="moon" xmlns="http://www.w3.org/2000/svg" width="24" height="18" viewBox="0 0 24 24"
+                        fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                        stroke-linejoin="round">
+                        <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+                    </svg>
+                    <svg id="sun" xmlns="http://www.w3.org/2000/svg" width="24" height="18" viewBox="0 0 24 24"
+                        fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                        stroke-linejoin="round">
+                        <circle cx="12" cy="12" r="5"></circle>
+                        <line x1="12" y1="1" x2="12" y2="3"></line>
+                        <line x1="12" y1="21" x2="12" y2="23"></line>
+                        <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+                        <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+                        <line x1="1" y1="12" x2="3" y2="12"></line>
+                        <line x1="21" y1="12" x2="23" y2="12"></line>
+                        <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+                        <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+                    </svg>
+                </button>
+            </div>
+        </div>
+        <ul id="menu">
+            <li>
+                <a href="http://localhost:1313/ddd-fastapi-rentals/curso-ddd-fastapi/" title="Currso DDD y Python con Fastapi">
+                    <span>Currso DDD y Python con Fastapi</span>
+                </a>
+            </li>
+        </ul>
+    </nav>
+</header>
+<main class="main">
+
+<article class="post-single">
+  <header class="post-header">
+    <div class="breadcrumbs"><a href="http://localhost:1313/ddd-fastapi-rentals/">Home</a>&nbsp;»&nbsp;<a href="http://localhost:1313/ddd-fastapi-rentals/curso-ddd-fastapi/">Curso DDD con FastAPI</a></div>
+    <h1 class="post-title entry-hint-parent">
+      Capítulo 2 – Dominio: pensar antes de programar
+    </h1>
+    <div class="post-meta">
+
+</div>
+  </header> 
+  <div class="post-content"><h2 id="qué-vas-a-aprender">Qué vas a aprender<a hidden class="anchor" aria-hidden="true" href="#qué-vas-a-aprender">#</a></h2>
+<p>En este capítulo vas a aprender:</p>
+<ul>
+<li>Qué significa realmente <strong>dominio</strong> en Domain-Driven Design</li>
+<li>Por qué el dominio es más importante que el código</li>
+<li>Qué problemas aparecen cuando empezamos programando sin pensar</li>
+<li>Cómo identificar reglas de negocio aunque no seas técnico</li>
+<li>Cómo usar este capítulo como base mental para todo lo que vendrá después</li>
+</ul>
+<blockquote>
+<p>Objetivo del capítulo: cambiar la forma en la que piensas un sistema <strong>antes</strong> de escribir una sola línea de código.</p>
+</blockquote>
+<hr>
+<h2 id="problema">Problema<a hidden class="anchor" aria-hidden="true" href="#problema">#</a></h2>
+<p>Cuando alguien empieza a programar, suele hacerlo así:</p>
+<ol>
+<li>Aprende un lenguaje</li>
+<li>Aprende un framework</li>
+<li>Empieza a escribir código</li>
+<li>Ajusta sobre la marcha</li>
+</ol>
+<p>El problema es que este enfoque provoca:</p>
+<ul>
+<li>Código difícil de entender</li>
+<li>Reglas repartidas por todas partes</li>
+<li>Cambios caros y arriesgados</li>
+<li>Sistemas que funcionan, pero no se entienden</li>
+</ul>
+<p>Esto no es un problema de Python.
+Es un problema de <strong>cómo pensamos</strong> el software.</p>
+<hr>
+<h2 id="idea-clave">Idea clave<a hidden class="anchor" aria-hidden="true" href="#idea-clave">#</a></h2>
+<blockquote>
+<p><strong>El software no trata de código, trata de negocio.</strong></p>
+</blockquote>
+<p>El código solo es una forma de expresar reglas que ya existen en la realidad.</p>
+<p>Si no entendemos bien esas reglas:</p>
+<ul>
+<li>el código será confuso</li>
+<li>los cambios serán dolorosos</li>
+<li>el sistema será frágil</li>
+</ul>
+<p>DDD parte de una idea muy simple:</p>
+<blockquote>
+<p>Primero entendemos el dominio.
+Luego lo modelamos.
+Después escribimos código.</p>
+</blockquote>
+<hr>
+<h2 id="qué-es-el-dominio">¿Qué es el dominio?<a hidden class="anchor" aria-hidden="true" href="#qué-es-el-dominio">#</a></h2>
+<p>El <strong>dominio</strong> es el conjunto de:</p>
+<ul>
+<li>conceptos</li>
+<li>reglas</li>
+<li>decisiones</li>
+<li>restricciones</li>
+</ul>
+<p>que existen en el mundo real y que el software debe respetar.</p>
+<p>Ejemplos de dominios:</p>
+<ul>
+<li>alquiler de viviendas</li>
+<li>banca</li>
+<li>logística</li>
+<li>sanidad</li>
+<li>educación</li>
+</ul>
+<p>El dominio <strong>no es</strong>:</p>
+<ul>
+<li>la base de datos</li>
+<li>la API</li>
+<li>el framework</li>
+<li>el lenguaje</li>
+</ul>
+<hr>
+<h2 id="ejemplo-en-la-vida-real">Ejemplo en la vida real<a hidden class="anchor" aria-hidden="true" href="#ejemplo-en-la-vida-real">#</a></h2>
+<p>Imagina un sistema de alquiler de viviendas.</p>
+<p>Antes de programar, ya existen reglas como:</p>
+<ul>
+<li>Un alquiler tiene una fecha de inicio y una de fin</li>
+<li>No se puede alquilar una vivienda si ya está ocupada</li>
+<li>Un contrato no puede empezar en el pasado</li>
+<li>Un alquiler puede estar activo, cancelado o finalizado</li>
+</ul>
+<p>Estas reglas existen <strong>aunque no haya software</strong>.</p>
+<p>Nuestro trabajo como desarrolladores no es inventarlas, sino <strong>respetarlas y expresarlas correctamente</strong>.</p>
+<hr>
+<h2 id="lenguaje-ubicuo-sin-tecnicismos">Lenguaje Ubicuo (sin tecnicismos)<a hidden class="anchor" aria-hidden="true" href="#lenguaje-ubicuo-sin-tecnicismos">#</a></h2>
+<p>Para poder modelar bien un dominio, necesitamos hablar el mismo idioma.</p>
+<p>Eso significa:</p>
+<ul>
+<li>Usar las mismas palabras que usa el negocio</li>
+<li>Evitar términos técnicos innecesarios</li>
+<li>Nombrar las cosas como se entienden en la realidad</li>
+</ul>
+<p>Por ejemplo:</p>
+<ul>
+<li>Decimos <em>alquiler</em>, no <em>rental_record</em></li>
+<li>Decimos <em>cancelar</em>, no <em>set_status_false</em></li>
+</ul>
+<blockquote>
+<p>Cuando el código se lee como una conversación del negocio, vamos por buen camino.</p>
+</blockquote>
+<hr>
+<h2 id="qué-pasa-cuando-ignoramos-el-dominio">Qué pasa cuando ignoramos el dominio<a hidden class="anchor" aria-hidden="true" href="#qué-pasa-cuando-ignoramos-el-dominio">#</a></h2>
+<p>Cuando no pensamos en dominio:</p>
+<ul>
+<li>Todo se convierte en CRUD</li>
+<li>Las reglas se meten en controladores</li>
+<li>Los cambios rompen cosas</li>
+<li>Nadie sabe dónde está la lógica</li>
+</ul>
+<p>El sistema se vuelve:</p>
+<ul>
+<li>frágil</li>
+<li>difícil de testear</li>
+<li>imposible de evolucionar</li>
+</ul>
+<hr>
+<h2 id="implementación-en-el-proyecto">Implementación en el proyecto<a hidden class="anchor" aria-hidden="true" href="#implementación-en-el-proyecto">#</a></h2>
+<p>En nuestro proyecto, el dominio vivirá en:</p>
+<pre tabindex="0"><code>src/rentals/domain/
+</code></pre><p>Ahí pondremos:</p>
+<ul>
+<li>Entidades</li>
+<li>Value Objects</li>
+<li>Reglas de negocio</li>
+<li>Errores de dominio</li>
+</ul>
+<p>Importante:</p>
+<blockquote>
+<p>El dominio <strong>no conoce</strong> bases de datos, HTTP, ni frameworks.</p>
+</blockquote>
+<p>Eso vendrá después.</p>
+<hr>
+<h2 id="check-final">Check final<a hidden class="anchor" aria-hidden="true" href="#check-final">#</a></h2>
+<p>Antes de pasar al siguiente capítulo, deberías poder decir:</p>
+<ul>
+<li><input disabled="" type="checkbox"> Sé explicar qué es el dominio con mis propias palabras</li>
+<li><input disabled="" type="checkbox"> Entiendo por qué no empezamos programando</li>
+<li><input disabled="" type="checkbox"> Veo reglas de negocio en problemas cotidianos</li>
+<li><input disabled="" type="checkbox"> Entiendo por qué el dominio no depende del framework</li>
+</ul>
+<hr>
+<h2 id="ejercicios">Ejercicios<a hidden class="anchor" aria-hidden="true" href="#ejercicios">#</a></h2>
+<ol>
+<li>Piensa en un sistema cotidiano (por ejemplo, un gimnasio o una tienda online).</li>
+<li>Escribe 5 reglas que existan aunque no haya software.</li>
+<li>Reescribe esas reglas sin usar palabras técnicas.</li>
+</ol>
+<p>Ejemplo:</p>
+<blockquote>
+<p>“Un cliente no puede tener dos suscripciones activas al mismo tiempo.”</p>
+</blockquote>
+<hr>
+<h2 id="errores-típicos">Errores típicos<a hidden class="anchor" aria-hidden="true" href="#errores-típicos">#</a></h2>
+<ul>
+<li>Confundir dominio con base de datos</li>
+<li>Pensar que el dominio es solo una carpeta</li>
+<li>Empezar por el framework</li>
+<li>Modelar pensando en tablas</li>
+</ul>
+<hr>
+<h2 id="glosario-rápido">Glosario rápido<a hidden class="anchor" aria-hidden="true" href="#glosario-rápido">#</a></h2>
+<ul>
+<li><strong>Dominio</strong>: conjunto de reglas y conceptos del negocio</li>
+<li><strong>DDD</strong>: forma de diseñar software centrada en el dominio</li>
+<li><strong>Lenguaje Ubicuo</strong>: vocabulario compartido entre negocio y código</li>
+</ul>
+<hr>
+<h2 id="próximo-capítulo">Próximo capítulo<a hidden class="anchor" aria-hidden="true" href="#próximo-capítulo">#</a></h2>
+<p>En el <strong>Capítulo 03</strong> empezaremos a convertir el dominio en código:</p>
+<blockquote>
+<p><strong>Entidades y Value Objects</strong>.</p>
+</blockquote>
+<p>Ahí escribiremos nuestras primeras clases, pero siempre respetando lo aprendido aquí.</p>
+<p>Continuamos en <strong>03 — Entidades y Value Objects</strong> 🚀</p>
+
+
+  </div>
+
+  <footer class="post-footer">
+    <ul class="post-tags">
+    </ul>
+
+  </footer>
+</article>
+    </main>
+    
+<footer class="footer">
+        <span>&copy; 2025 <a href="http://localhost:1313/ddd-fastapi-rentals/">Blog de acarres</a></span> · 
+
+    <span>
+        Powered by
+        <a href="https://gohugo.io/" rel="noopener noreferrer" target="_blank">Hugo</a> &
+        <a href="https://github.com/adityatelange/hugo-PaperMod/" rel="noopener" target="_blank">PaperMod</a>
+    </span>
+</footer>
+<a href="#top" aria-label="go to top" title="Go to Top (Alt + G)" class="top-link" id="top-link" accesskey="g">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 12 6" fill="currentColor">
+        <path d="M12 6H0l6-6z" />
+    </svg>
+</a>
+
+<script>
+    let menu = document.getElementById('menu');
+    if (menu) {
+        
+        const scrollPosition = localStorage.getItem("menu-scroll-position");
+        if (scrollPosition) {
+            menu.scrollLeft = parseInt(scrollPosition, 10);
+        }
+        
+        menu.onscroll = function () {
+            localStorage.setItem("menu-scroll-position", menu.scrollLeft);
+        }
+    }
+
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+        anchor.addEventListener("click", function (e) {
+            e.preventDefault();
+            var id = this.getAttribute("href").substr(1);
+            if (!window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+                document.querySelector(`[id='${decodeURIComponent(id)}']`).scrollIntoView({
+                    behavior: "smooth"
+                });
+            } else {
+                document.querySelector(`[id='${decodeURIComponent(id)}']`).scrollIntoView();
+            }
+            if (id === "top") {
+                history.replaceState(null, null, " ");
+            } else {
+                history.pushState(null, null, `#${id}`);
+            }
+        });
+    });
+
+</script>
+<script>
+    var mybutton = document.getElementById("top-link");
+    window.onscroll = function () {
+        if (document.body.scrollTop > 800 || document.documentElement.scrollTop > 800) {
+            mybutton.style.visibility = "visible";
+            mybutton.style.opacity = "1";
+        } else {
+            mybutton.style.visibility = "hidden";
+            mybutton.style.opacity = "0";
+        }
+    };
+
+</script>
+<script>
+    document.getElementById("theme-toggle").addEventListener("click", () => {
+        const html = document.querySelector("html");
+        if (html.dataset.theme === "dark") {
+            html.dataset.theme = 'light';
+            localStorage.setItem("pref-theme", 'light');
+        } else {
+            html.dataset.theme = 'dark';
+            localStorage.setItem("pref-theme", 'dark');
+        }
+    })
+
+</script>
+</body>
+
+</html>

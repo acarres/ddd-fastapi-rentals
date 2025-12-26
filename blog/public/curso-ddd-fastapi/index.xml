@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:content="http://purl.org/rss/1.0/modules/content/">
+  <channel>
+    <title>Curso DDD con FastAPI on Blog de acarres</title>
+    <link>http://localhost:1313/ddd-fastapi-rentals/curso-ddd-fastapi/</link>
+    <description>Recent content in Curso DDD con FastAPI on Blog de acarres</description>
+    <generator>Hugo -- 0.153.2</generator>
+    <language>es-es</language>
+    <atom:link href="http://localhost:1313/ddd-fastapi-rentals/curso-ddd-fastapi/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Capítulo 1 – Setup profesional desde cero con Docker</title>
+      <link>http://localhost:1313/ddd-fastapi-rentals/curso-ddd-fastapi/01-setup-docker/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      <guid>http://localhost:1313/ddd-fastapi-rentals/curso-ddd-fastapi/01-setup-docker/</guid>
+      <description>&lt;h2 id=&#34;qué-vas-a-aprender&#34;&gt;Qué vas a aprender&lt;/h2&gt;
+&lt;p&gt;En este capítulo vas a aprender:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;Por qué &lt;strong&gt;no instalar nada&lt;/strong&gt; en tu ordenador es una buena decisión&lt;/li&gt;
+&lt;li&gt;Qué es Docker y para qué lo usamos en este curso&lt;/li&gt;
+&lt;li&gt;Cómo montar un entorno profesional desde cero&lt;/li&gt;
+&lt;li&gt;Cómo arrancar una API real sin conocer Python&lt;/li&gt;
+&lt;li&gt;Cómo trabajar de forma cómoda usando &lt;code&gt;make&lt;/code&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;blockquote&gt;
+&lt;p&gt;Objetivo final del capítulo: tener una API funcionando en tu máquina sin ensuciar tu sistema.&lt;/p&gt;</description>
+    </item>
+    <item>
+      <title>Capítulo 2 – Dominio: pensar antes de programar</title>
+      <link>http://localhost:1313/ddd-fastapi-rentals/curso-ddd-fastapi/02-dominio/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      <guid>http://localhost:1313/ddd-fastapi-rentals/curso-ddd-fastapi/02-dominio/</guid>
+      <description>&lt;h2 id=&#34;qué-vas-a-aprender&#34;&gt;Qué vas a aprender&lt;/h2&gt;
+&lt;p&gt;En este capítulo vas a aprender:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;Qué significa realmente &lt;strong&gt;dominio&lt;/strong&gt; en Domain-Driven Design&lt;/li&gt;
+&lt;li&gt;Por qué el dominio es más importante que el código&lt;/li&gt;
+&lt;li&gt;Qué problemas aparecen cuando empezamos programando sin pensar&lt;/li&gt;
+&lt;li&gt;Cómo identificar reglas de negocio aunque no seas técnico&lt;/li&gt;
+&lt;li&gt;Cómo usar este capítulo como base mental para todo lo que vendrá después&lt;/li&gt;
+&lt;/ul&gt;
+&lt;blockquote&gt;
+&lt;p&gt;Objetivo del capítulo: cambiar la forma en la que piensas un sistema &lt;strong&gt;antes&lt;/strong&gt; de escribir una sola línea de código.&lt;/p&gt;</description>
+    </item>
+    <item>
+      <title>Capítulo 3 – Entidades y Value Objects</title>
+      <link>http://localhost:1313/ddd-fastapi-rentals/curso-ddd-fastapi/03-entidades-value-objects/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      <guid>http://localhost:1313/ddd-fastapi-rentals/curso-ddd-fastapi/03-entidades-value-objects/</guid>
+      <description>&lt;blockquote&gt;
+&lt;p&gt;En este capítulo empezamos a escribir &lt;strong&gt;código&lt;/strong&gt;, pero manteniendo una separación estricta entre:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;qué es negocio (DDD)&lt;/strong&gt;&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;qué es lenguaje (Python)&lt;/strong&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;Este capítulo está diseñado para alguien que &lt;strong&gt;no conoce ni DDD ni Python&lt;/strong&gt;.&lt;/p&gt;
+&lt;hr&gt;
+&lt;h2 id=&#34;-objetivo-del-capítulo&#34;&gt;🎯 Objetivo del capítulo&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;Entender qué son &lt;strong&gt;Entidades&lt;/strong&gt; y &lt;strong&gt;Value Objects&lt;/strong&gt; en DDD&lt;/li&gt;
+&lt;li&gt;Entender qué problemas resuelven&lt;/li&gt;
+&lt;li&gt;Aprender cómo se representan en &lt;strong&gt;Python desde cero&lt;/strong&gt;&lt;/li&gt;
+&lt;li&gt;Construir el primer modelo de dominio &lt;strong&gt;correcto y protegido&lt;/strong&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;hr&gt;
+&lt;h2 id=&#34;-conceptos-de-ddd-introducidos-en-este-capítulo&#34;&gt;🧩 Conceptos de DDD introducidos en este capítulo&lt;/h2&gt;
+&lt;p&gt;En esta sección &lt;strong&gt;no hablamos de Python&lt;/strong&gt;.
+Solo hablamos de &lt;strong&gt;modelado del dominio&lt;/strong&gt;.&lt;/p&gt;</description>
+    </item>
+  </channel>
+</rss>

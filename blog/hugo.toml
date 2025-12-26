@@ -1,6 +1,6 @@
 baseURL = "https://acarres.github.io/ddd-fastapi-rentals/"
 languageCode = "es-es"
-title = "DDD + FastAPI Rentals"
+title = "Blog de acarres"
 theme = "PaperMod"
 
 [[menu.main]]
@@ -11,3 +11,4 @@ weight = 1
 [params]
   ShowPostNavLinks = true
   ShowBreadCrumbs = true
+  mainSections = ["posts"]
