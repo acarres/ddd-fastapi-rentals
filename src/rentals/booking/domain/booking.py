@@ -1,6 +1,7 @@
 from dataclasses import dataclass
 from uuid import UUID
 
+from rentals.booking.domain.errors.booking_not_active import BookingNotActive
 from shared.domain.value_objects.date_range import DateRange
 
 from rentals.booking.domain.booking_status import BookingStatus

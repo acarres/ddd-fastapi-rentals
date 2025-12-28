@@ -1,5 +1,6 @@
-from abc import ABC
+from shared.domain.errors.domain_error import DomainError
+
 
 class InvalidDateRange(DomainError):
-    """Base class for domain errors."""
+    """Exception raised when a date range is invalid."""
     pass

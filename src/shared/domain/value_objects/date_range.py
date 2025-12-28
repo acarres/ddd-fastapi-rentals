@@ -1,7 +1,7 @@
 from dataclasses import dataclass
 from datetime import date
 
-from shared.domain.errors.date_range_exception import InvalidDateRange
+from shared.domain.errors.invalid_date_range import InvalidDateRange
 
 
 @dataclass(frozen=True)

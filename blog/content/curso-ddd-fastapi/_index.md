@@ -15,6 +15,7 @@ También aprovechar para aprender [Hugo](https://gohugo.io/)
 - [01 — Setup con Docker](01-setup-docker)
 - [02 — Dominio: pensar antes de programar](02-dominio)
 - [03 — Entidades y Value Objects](03-entidades-value-objects)
+- [04 — Test de dominio](04.test-de-dominio)
 
 ## Cómo usar estos apuntes
 1. Lee el capítulo.
