@@ -8,11 +8,16 @@
     <language>es-es</language>
     <atom:link href="http://localhost:1313/ddd-fastapi-rentals/curso-ddd-fastapi/index.xml" rel="self" type="application/rss+xml" />
     <item>
-      <title>Capítulo 1 – Setup profesional desde cero con Docker</title>
-      <link>http://localhost:1313/ddd-fastapi-rentals/curso-ddd-fastapi/01-setup-docker/</link>
+      <title>Setup profesional desde cero con Docker</title>
+      <link>http://localhost:1313/ddd-fastapi-rentals/curso-ddd-fastapi/setup-docker/</link>
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
-      <guid>http://localhost:1313/ddd-fastapi-rentals/curso-ddd-fastapi/01-setup-docker/</guid>
-      <description>&lt;h2 id=&#34;qué-vas-a-aprender&#34;&gt;Qué vas a aprender&lt;/h2&gt;
+      <guid>http://localhost:1313/ddd-fastapi-rentals/curso-ddd-fastapi/setup-docker/</guid>
+      <description>&lt;blockquote&gt;
+&lt;p&gt;En este capítulo vamos a preparar &lt;strong&gt;el entorno de trabajo&lt;/strong&gt; sobre el que construiremos todo el curso.
+No vamos a aprender Python todavía.
+Vamos a asegurarnos de que &lt;strong&gt;el entorno no sea un problema&lt;/strong&gt;.&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;h2 id=&#34;-qué-vas-a-aprender&#34;&gt;🎯 Qué vas a aprender&lt;/h2&gt;
 &lt;p&gt;En este capítulo vas a aprender:&lt;/p&gt;
 &lt;ul&gt;
 &lt;li&gt;Por qué &lt;strong&gt;no instalar nada&lt;/strong&gt; en tu ordenador es una buena decisión&lt;/li&gt;
@@ -22,13 +27,13 @@
 &lt;li&gt;Cómo trabajar de forma cómoda usando &lt;code&gt;make&lt;/code&gt;&lt;/li&gt;
 &lt;/ul&gt;
 &lt;blockquote&gt;
-&lt;p&gt;Objetivo final del capítulo: tener una API funcionando en tu máquina sin ensuciar tu sistema.&lt;/p&gt;</description>
+&lt;p&gt;&lt;strong&gt;Objetivo final del capítulo&lt;/strong&gt;: tener una API funcionando en tu máquina &lt;strong&gt;sin ensuciar tu sistema&lt;/strong&gt;.&lt;/p&gt;</description>
     </item>
     <item>
-      <title>Capítulo 2 – Dominio: pensar antes de programar</title>
-      <link>http://localhost:1313/ddd-fastapi-rentals/curso-ddd-fastapi/02-dominio/</link>
+      <title>Dominio: pensar antes de programar</title>
+      <link>http://localhost:1313/ddd-fastapi-rentals/curso-ddd-fastapi/pensar-antes-de-programar/</link>
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
-      <guid>http://localhost:1313/ddd-fastapi-rentals/curso-ddd-fastapi/02-dominio/</guid>
+      <guid>http://localhost:1313/ddd-fastapi-rentals/curso-ddd-fastapi/pensar-antes-de-programar/</guid>
       <description>&lt;h2 id=&#34;qué-vas-a-aprender&#34;&gt;Qué vas a aprender&lt;/h2&gt;
 &lt;p&gt;En este capítulo vas a aprender:&lt;/p&gt;
 &lt;ul&gt;
@@ -42,10 +47,10 @@
 &lt;p&gt;Objetivo del capítulo: cambiar la forma en la que piensas un sistema &lt;strong&gt;antes&lt;/strong&gt; de escribir una sola línea de código.&lt;/p&gt;</description>
     </item>
     <item>
-      <title>Capítulo 3 – Entidades y Value Objects</title>
-      <link>http://localhost:1313/ddd-fastapi-rentals/curso-ddd-fastapi/03-entidades-value-objects/</link>
+      <title>Entidades y Value Objects</title>
+      <link>http://localhost:1313/ddd-fastapi-rentals/curso-ddd-fastapi/entidades-value-objects/</link>
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
-      <guid>http://localhost:1313/ddd-fastapi-rentals/curso-ddd-fastapi/03-entidades-value-objects/</guid>
+      <guid>http://localhost:1313/ddd-fastapi-rentals/curso-ddd-fastapi/entidades-value-objects/</guid>
       <description>&lt;blockquote&gt;
 &lt;p&gt;En este capítulo empezamos a escribir &lt;strong&gt;código&lt;/strong&gt;, pero manteniendo una separación estricta entre:&lt;/p&gt;
 &lt;ul&gt;
@@ -66,6 +71,54 @@
 &lt;h2 id=&#34;-conceptos-de-ddd-introducidos-en-este-capítulo&#34;&gt;🧩 Conceptos de DDD introducidos en este capítulo&lt;/h2&gt;
 &lt;p&gt;En esta sección &lt;strong&gt;no hablamos de Python&lt;/strong&gt;.
 Solo hablamos de &lt;strong&gt;modelado del dominio&lt;/strong&gt;.&lt;/p&gt;</description>
+    </item>
+    <item>
+      <title>Tests de dominio</title>
+      <link>http://localhost:1313/ddd-fastapi-rentals/curso-ddd-fastapi/test-de-dominio/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      <guid>http://localhost:1313/ddd-fastapi-rentals/curso-ddd-fastapi/test-de-dominio/</guid>
+      <description>&lt;blockquote&gt;
+&lt;p&gt;En este capítulo aprendemos a &lt;strong&gt;probar el dominio&lt;/strong&gt;, no el framework ni la base de datos.
+Los tests sirven para validar &lt;strong&gt;reglas de negocio&lt;/strong&gt; y darnos &lt;strong&gt;confianza para cambiar el código&lt;/strong&gt;.&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;Este capítulo está pensado para alguien que &lt;strong&gt;no conoce ni Python ni testing&lt;/strong&gt;.&lt;/p&gt;
+&lt;hr&gt;
+&lt;h2 id=&#34;-objetivo-del-capítulo&#34;&gt;🎯 Objetivo del capítulo&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;Entender qué es un &lt;strong&gt;test&lt;/strong&gt;&lt;/li&gt;
+&lt;li&gt;Entender por qué en DDD se testea primero el dominio&lt;/li&gt;
+&lt;li&gt;Aprender &lt;code&gt;pytest&lt;/code&gt; desde cero&lt;/li&gt;
+&lt;li&gt;Escribir tests para &lt;strong&gt;Value Objects&lt;/strong&gt; y &lt;strong&gt;Entidades&lt;/strong&gt;&lt;/li&gt;
+&lt;li&gt;Aprender a ejecutar tests de forma cómoda con &lt;strong&gt;Makefile&lt;/strong&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;hr&gt;
+&lt;h2 id=&#34;-conceptos-de-ddd-introducidos-en-este-capítulo&#34;&gt;🧩 Conceptos de DDD introducidos en este capítulo&lt;/h2&gt;
+&lt;p&gt;En esta sección &lt;strong&gt;no hablamos de Python&lt;/strong&gt;.&lt;/p&gt;</description>
+    </item>
+    <item>
+      <title>Application Layer: qué es y qué no es</title>
+      <link>http://localhost:1313/ddd-fastapi-rentals/curso-ddd-fastapi/que-es-application-layer/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      <guid>http://localhost:1313/ddd-fastapi-rentals/curso-ddd-fastapi/que-es-application-layer/</guid>
+      <description>&lt;hr&gt;
+&lt;h1 id=&#34;31--application-layer-qué-es-y-qué-no-es&#34;&gt;3.1 — Application Layer: qué es y qué no es&lt;/h1&gt;
+&lt;h2 id=&#34;-bloque-3--application-layer&#34;&gt;🧭 Bloque 3 — Application Layer&lt;/h2&gt;
+&lt;blockquote&gt;
+&lt;p&gt;En este capítulo introducimos una de las capas más mal entendidas del software.
+La &lt;strong&gt;Application Layer&lt;/strong&gt; no contiene reglas de negocio, pero sin ella el sistema no funciona.&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;hr&gt;
+&lt;h2 id=&#34;-qué-vas-a-aprender&#34;&gt;🎯 Qué vas a aprender&lt;/h2&gt;
+&lt;p&gt;En este capítulo vas a aprender:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;Qué es la &lt;strong&gt;Application Layer&lt;/strong&gt; en DDD&lt;/li&gt;
+&lt;li&gt;Qué problema resuelve&lt;/li&gt;
+&lt;li&gt;Qué responsabilidades tiene&lt;/li&gt;
+&lt;li&gt;Qué NO debe hacer nunca&lt;/li&gt;
+&lt;li&gt;Cómo se relaciona con el dominio&lt;/li&gt;
+&lt;/ul&gt;
+&lt;blockquote&gt;
+&lt;p&gt;Objetivo del capítulo: saber &lt;strong&gt;dónde poner cada cosa&lt;/strong&gt; y evitar sistemas caóticos.&lt;/p&gt;</description>
     </item>
   </channel>
 </rss>

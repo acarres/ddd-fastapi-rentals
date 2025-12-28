@@ -1,27 +1,11 @@
 ---
-
 title: "Setup profesional desde cero con Docker"
 weight: 1
----------
-
-# 1.1 — Setup profesional desde cero con Docker
-
-## 🧱 Bloque 1 — Fundamentos y entorno
+---
 
 > En este capítulo vamos a preparar **el entorno de trabajo** sobre el que construiremos todo el curso.
 > No vamos a aprender Python todavía.
 > Vamos a asegurarnos de que **el entorno no sea un problema**.
-
----
-
-> 🔍 **Sobre el “Check final”**
-> Al final de cada capítulo encontrarás un **Check final**.
-> No es un examen ni algo que tengas que entregar.
-> Es una lista de verificación para que compruebes si has entendido lo mínimo necesario para continuar.
->
-> Si no puedes marcar todos los puntos, no pasa nada: vuelve a leer el capítulo con calma antes de seguir.
-
----
 
 ## 🎯 Qué vas a aprender
 
@@ -318,9 +302,3 @@ Antes de continuar con el curso, deberías poder decir:
 * **docker-compose**: orquestador de contenedores
 
 ---
-
-## 🔜 Próximo capítulo
-
-En el **Capítulo 2.1** empezaremos con lo importante:
-
-> **pensar el dominio antes de escribir código**

@@ -201,13 +201,3 @@ Ejemplo:
 * **Lenguaje Ubicuo**: vocabulario compartido entre negocio y código
 
 ---
-
-## Próximo capítulo
-
-En el **Capítulo 03** empezaremos a convertir el dominio en código:
-
-> **Entidades y Value Objects**.
-
-Ahí escribiremos nuestras primeras clases, pero siempre respetando lo aprendido aquí.
-
-Continuamos en **03 — Entidades y Value Objects** 🚀

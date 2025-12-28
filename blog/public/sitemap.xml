@@ -2,11 +2,15 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
   xmlns:xhtml="http://www.w3.org/1999/xhtml">
   <url>
-    <loc>http://localhost:1313/ddd-fastapi-rentals/curso-ddd-fastapi/01-setup-docker/</loc>
+    <loc>http://localhost:1313/ddd-fastapi-rentals/curso-ddd-fastapi/setup-docker/</loc>
   </url><url>
-    <loc>http://localhost:1313/ddd-fastapi-rentals/curso-ddd-fastapi/02-dominio/</loc>
+    <loc>http://localhost:1313/ddd-fastapi-rentals/curso-ddd-fastapi/pensar-antes-de-programar/</loc>
   </url><url>
-    <loc>http://localhost:1313/ddd-fastapi-rentals/curso-ddd-fastapi/03-entidades-value-objects/</loc>
+    <loc>http://localhost:1313/ddd-fastapi-rentals/curso-ddd-fastapi/entidades-value-objects/</loc>
+  </url><url>
+    <loc>http://localhost:1313/ddd-fastapi-rentals/curso-ddd-fastapi/test-de-dominio/</loc>
+  </url><url>
+    <loc>http://localhost:1313/ddd-fastapi-rentals/curso-ddd-fastapi/que-es-application-layer/</loc>
   </url><url>
     <loc>http://localhost:1313/ddd-fastapi-rentals/</loc>
   </url><url>

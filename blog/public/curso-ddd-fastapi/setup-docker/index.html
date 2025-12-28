@@ -1,0 +1,451 @@
+<!DOCTYPE html>
+<html lang="en" dir="auto" data-theme="auto">
+
+<head><script src="/ddd-fastapi-rentals/livereload.js?mindelay=10&amp;v=2&amp;port=1313&amp;path=ddd-fastapi-rentals/livereload" data-no-instant defer></script><meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<meta name="robots" content="noindex, nofollow">
+<title>Setup profesional desde cero con Docker | Blog de acarres</title>
+<meta name="keywords" content="">
+<meta name="description" content="
+En este capítulo vamos a preparar el entorno de trabajo sobre el que construiremos todo el curso.
+No vamos a aprender Python todavía.
+Vamos a asegurarnos de que el entorno no sea un problema.
+
+🎯 Qué vas a aprender
+En este capítulo vas a aprender:
+
+Por qué no instalar nada en tu ordenador es una buena decisión
+Qué es Docker y para qué lo usamos en este curso
+Cómo montar un entorno profesional desde cero
+Cómo arrancar una API real sin conocer Python
+Cómo trabajar de forma cómoda usando make
+
+
+Objetivo final del capítulo: tener una API funcionando en tu máquina sin ensuciar tu sistema.">
+<meta name="author" content="">
+<link rel="canonical" href="http://localhost:1313/ddd-fastapi-rentals/curso-ddd-fastapi/setup-docker/">
+<link crossorigin="anonymous" href="/ddd-fastapi-rentals/assets/css/stylesheet.343cc480b9ffc8f04ccbe5e968ad674880cab773ec19905e93033065c1e7a804.css" integrity="sha256-NDzEgLn/yPBMy&#43;XpaK1nSIDKt3PsGZBekwMwZcHnqAQ=" rel="preload stylesheet" as="style">
+<link rel="icon" href="http://localhost:1313/ddd-fastapi-rentals/favicon.ico">
+<link rel="icon" type="image/png" sizes="16x16" href="http://localhost:1313/ddd-fastapi-rentals/favicon-16x16.png">
+<link rel="icon" type="image/png" sizes="32x32" href="http://localhost:1313/ddd-fastapi-rentals/favicon-32x32.png">
+<link rel="apple-touch-icon" href="http://localhost:1313/ddd-fastapi-rentals/apple-touch-icon.png">
+<link rel="mask-icon" href="http://localhost:1313/ddd-fastapi-rentals/safari-pinned-tab.svg">
+<meta name="theme-color" content="#2e2e33">
+<meta name="msapplication-TileColor" content="#2e2e33">
+<link rel="alternate" hreflang="en" href="http://localhost:1313/ddd-fastapi-rentals/curso-ddd-fastapi/setup-docker/">
+<noscript>
+    <style>
+        #theme-toggle,
+        .top-link {
+            display: none;
+        }
+
+    </style>
+    <style>
+        @media (prefers-color-scheme: dark) {
+            :root {
+                --theme: rgb(29, 30, 32);
+                --entry: rgb(46, 46, 51);
+                --primary: rgb(218, 218, 219);
+                --secondary: rgb(155, 156, 157);
+                --tertiary: rgb(65, 66, 68);
+                --content: rgb(196, 196, 197);
+                --code-block-bg: rgb(46, 46, 51);
+                --code-bg: rgb(55, 56, 62);
+                --border: rgb(51, 51, 51);
+                color-scheme: dark;
+            }
+
+            .list {
+                background: var(--theme);
+            }
+
+            .toc {
+                background: var(--entry);
+            }
+        }
+
+        @media (prefers-color-scheme: light) {
+            .list::-webkit-scrollbar-thumb {
+                border-color: var(--code-bg);
+            }
+        }
+
+    </style>
+</noscript>
+<script>
+    if (localStorage.getItem("pref-theme") === "dark") {
+        document.querySelector("html").dataset.theme = 'dark';
+    } else if (localStorage.getItem("pref-theme") === "light") {
+       document.querySelector("html").dataset.theme = 'light';
+    } else if (window.matchMedia('(prefers-color-scheme: dark)').matches) {
+        document.querySelector("html").dataset.theme = 'dark';
+    } else {
+        document.querySelector("html").dataset.theme = 'light';
+    }
+
+</script>
+</head>
+<body id="top">
+    <header class="header">
+    <nav class="nav">
+        <div class="logo">
+            <a href="http://localhost:1313/ddd-fastapi-rentals/" accesskey="h" title="Blog de acarres (Alt + H)">Blog de acarres</a>
+            <div class="logo-switches">
+                <button id="theme-toggle" accesskey="t" title="(Alt + T)" aria-label="Toggle theme">
+                    <svg id="moon" xmlns="http://www.w3.org/2000/svg" width="24" height="18" viewBox="0 0 24 24"
+                        fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                        stroke-linejoin="round">
+                        <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+                    </svg>
+                    <svg id="sun" xmlns="http://www.w3.org/2000/svg" width="24" height="18" viewBox="0 0 24 24"
+                        fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                        stroke-linejoin="round">
+                        <circle cx="12" cy="12" r="5"></circle>
+                        <line x1="12" y1="1" x2="12" y2="3"></line>
+                        <line x1="12" y1="21" x2="12" y2="23"></line>
+                        <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+                        <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+                        <line x1="1" y1="12" x2="3" y2="12"></line>
+                        <line x1="21" y1="12" x2="23" y2="12"></line>
+                        <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+                        <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+                    </svg>
+                </button>
+            </div>
+        </div>
+        <ul id="menu">
+            <li>
+                <a href="http://localhost:1313/ddd-fastapi-rentals/curso-ddd-fastapi/" title="Currso DDD y Python con Fastapi">
+                    <span>Currso DDD y Python con Fastapi</span>
+                </a>
+            </li>
+        </ul>
+    </nav>
+</header>
+<main class="main">
+
+<article class="post-single">
+  <header class="post-header">
+    <div class="breadcrumbs"><a href="http://localhost:1313/ddd-fastapi-rentals/">Home</a>&nbsp;»&nbsp;<a href="http://localhost:1313/ddd-fastapi-rentals/curso-ddd-fastapi/">Curso DDD con FastAPI</a></div>
+    <h1 class="post-title entry-hint-parent">
+      Setup profesional desde cero con Docker
+    </h1>
+    <div class="post-meta">
+
+</div>
+  </header> 
+  <div class="post-content"><blockquote>
+<p>En este capítulo vamos a preparar <strong>el entorno de trabajo</strong> sobre el que construiremos todo el curso.
+No vamos a aprender Python todavía.
+Vamos a asegurarnos de que <strong>el entorno no sea un problema</strong>.</p>
+</blockquote>
+<h2 id="-qué-vas-a-aprender">🎯 Qué vas a aprender<a hidden class="anchor" aria-hidden="true" href="#-qué-vas-a-aprender">#</a></h2>
+<p>En este capítulo vas a aprender:</p>
+<ul>
+<li>Por qué <strong>no instalar nada</strong> en tu ordenador es una buena decisión</li>
+<li>Qué es Docker y para qué lo usamos en este curso</li>
+<li>Cómo montar un entorno profesional desde cero</li>
+<li>Cómo arrancar una API real sin conocer Python</li>
+<li>Cómo trabajar de forma cómoda usando <code>make</code></li>
+</ul>
+<blockquote>
+<p><strong>Objetivo final del capítulo</strong>: tener una API funcionando en tu máquina <strong>sin ensuciar tu sistema</strong>.</p>
+</blockquote>
+<hr>
+<h2 id="-el-problema-real-al-empezar-a-programar">🧠 El problema real al empezar a programar<a hidden class="anchor" aria-hidden="true" href="#-el-problema-real-al-empezar-a-programar">#</a></h2>
+<p>Cuando empiezas a programar, es muy fácil encontrarte con problemas como:</p>
+<ul>
+<li>Tener que instalar muchas cosas en tu ordenador</li>
+<li>Versiones incompatibles de herramientas</li>
+<li>Que algo funcione “en mi máquina” pero no en otra</li>
+<li>No saber qué puedes borrar y qué no</li>
+</ul>
+<p>Esto genera frustración y hace que aprender sea <strong>mucho más difícil de lo necesario</strong>.</p>
+<hr>
+<h2 id="-idea-clave">💡 Idea clave<a hidden class="anchor" aria-hidden="true" href="#-idea-clave">#</a></h2>
+<blockquote>
+<p><strong>El entorno de desarrollo no debe ser un problema.</strong></p>
+</blockquote>
+<p>Por eso vamos a usar <strong>Docker</strong> desde el primer día.</p>
+<p>Docker nos permite crear un entorno aislado donde:</p>
+<ul>
+<li>Python ya viene instalado</li>
+<li>Las librerías están controladas</li>
+<li>El proyecto funciona igual hoy y dentro de un año</li>
+</ul>
+<hr>
+<h2 id="-qué-es-docker-explicado-fácil">🐳 ¿Qué es Docker? (explicado fácil)<a hidden class="anchor" aria-hidden="true" href="#-qué-es-docker-explicado-fácil">#</a></h2>
+<p>Docker es una herramienta que permite crear <strong>contenedores</strong>.</p>
+<p>Un contenedor es como una <strong>caja aislada</strong> donde:</p>
+<ul>
+<li>se instala Python</li>
+<li>se instalan las librerías</li>
+<li>se ejecuta la aplicación</li>
+</ul>
+<p>Tu ordenador <strong>no se ensucia</strong> y, si algo va mal, basta con borrar el contenedor.</p>
+<blockquote>
+<p>Piensa en Docker como una pequeña máquina virtual, pero ligera y específica para una aplicación.</p>
+</blockquote>
+<hr>
+<h2 id="-estructura-del-proyecto">🧱 Estructura del proyecto<a hidden class="anchor" aria-hidden="true" href="#-estructura-del-proyecto">#</a></h2>
+<p>Después de este primer paso, el proyecto tiene esta estructura:</p>
+<pre tabindex="0"><code>ddd-fastapi-rentals/
+├── docker/
+│   ├── Dockerfile
+│   ├── docker-compose.yml
+│   └── .dockerignore
+│
+├── setup/
+│   ├── requirements.txt
+│   └── requirements-dev.txt
+│
+├── src/
+│   └── rentals/
+│       ├── domain/
+│       ├── application/
+│       ├── infrastructure/
+│       └── interfaces/
+│
+├── tests/
+├── main.py
+└── Makefile
+</code></pre><p>Esta estructura separa claramente:</p>
+<ul>
+<li>infraestructura</li>
+<li>código de negocio</li>
+<li>configuración</li>
+</ul>
+<hr>
+<h2 id="-docker-en-el-proyecto">🐳 Docker en el proyecto<a hidden class="anchor" aria-hidden="true" href="#-docker-en-el-proyecto">#</a></h2>
+<h3 id="-directorio-docker">📁 Directorio <code>docker/</code><a hidden class="anchor" aria-hidden="true" href="#-directorio-docker">#</a></h3>
+<p>Aquí vive todo lo relacionado con Docker. Esto nos permite cambiar la infraestructura <strong>sin tocar el código</strong>.</p>
+<hr>
+<h2 id="-dockerdockerfile">📄 <code>docker/Dockerfile</code><a hidden class="anchor" aria-hidden="true" href="#-dockerdockerfile">#</a></h2>
+<p>El <code>Dockerfile</code> describe <strong>cómo se construye la imagen</strong> del contenedor.</p>
+<h3 id="imagen-base">Imagen base<a hidden class="anchor" aria-hidden="true" href="#imagen-base">#</a></h3>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-dockerfile" data-lang="dockerfile"><span style="display:flex;"><span><span style="color:#66d9ef">FROM</span> <span style="color:#e6db74">python:3.11-slim</span><span style="color:#960050;background-color:#1e0010">
+</span></span></span></code></pre></div><p>Usamos una imagen oficial y ligera de Python.</p>
+<hr>
+<h3 id="variables-de-entorno">Variables de entorno<a hidden class="anchor" aria-hidden="true" href="#variables-de-entorno">#</a></h3>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-dockerfile" data-lang="dockerfile"><span style="display:flex;"><span><span style="color:#66d9ef">ENV</span> PYTHONDONTWRITEBYTECODE<span style="color:#f92672">=</span><span style="color:#ae81ff">1</span> <span style="color:#ae81ff">\
+</span></span></span><span style="display:flex;"><span>    PYTHONUNBUFFERED<span style="color:#f92672">=</span><span style="color:#ae81ff">1</span>
+</span></span></code></pre></div><p>Evita archivos innecesarios y mejora los logs.</p>
+<hr>
+<h3 id="directorio-de-trabajo">Directorio de trabajo<a hidden class="anchor" aria-hidden="true" href="#directorio-de-trabajo">#</a></h3>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-dockerfile" data-lang="dockerfile"><span style="display:flex;"><span><span style="color:#66d9ef">WORKDIR</span> <span style="color:#e6db74">/app</span><span style="color:#960050;background-color:#1e0010">
+</span></span></span></code></pre></div><p>Define el directorio de trabajo dentro del contenedor.</p>
+<hr>
+<h3 id="dependencias-del-sistema">Dependencias del sistema<a hidden class="anchor" aria-hidden="true" href="#dependencias-del-sistema">#</a></h3>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-dockerfile" data-lang="dockerfile"><span style="display:flex;"><span><span style="color:#66d9ef">RUN</span> apt-get update <span style="color:#ae81ff">\
+</span></span></span><span style="display:flex;"><span>  <span style="color:#f92672">&amp;&amp;</span> apt-get install -y --no-install-recommends build-essential <span style="color:#ae81ff">\
+</span></span></span><span style="display:flex;"><span>  <span style="color:#f92672">&amp;&amp;</span> rm -rf /var/lib/apt/lists/*<span style="color:#960050;background-color:#1e0010">
+</span></span></span></code></pre></div><p>Instala herramientas básicas del sistema.</p>
+<hr>
+<h3 id="dependencias-de-python">Dependencias de Python<a hidden class="anchor" aria-hidden="true" href="#dependencias-de-python">#</a></h3>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-dockerfile" data-lang="dockerfile"><span style="display:flex;"><span><span style="color:#66d9ef">COPY</span> setup/requirements.txt setup/requirements-dev.txt /app/<span style="color:#960050;background-color:#1e0010">
+</span></span></span><span style="display:flex;"><span><span style="color:#66d9ef">RUN</span> pip install --no-cache-dir -r requirements.txt -r requirements-dev.txt<span style="color:#960050;background-color:#1e0010">
+</span></span></span></code></pre></div><hr>
+<h3 id="código-del-proyecto">Código del proyecto<a hidden class="anchor" aria-hidden="true" href="#código-del-proyecto">#</a></h3>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-dockerfile" data-lang="dockerfile"><span style="display:flex;"><span><span style="color:#66d9ef">COPY</span> . /app<span style="color:#960050;background-color:#1e0010">
+</span></span></span></code></pre></div><hr>
+<h3 id="puerto-y-comando-de-arranque">Puerto y comando de arranque<a hidden class="anchor" aria-hidden="true" href="#puerto-y-comando-de-arranque">#</a></h3>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-dockerfile" data-lang="dockerfile"><span style="display:flex;"><span><span style="color:#66d9ef">EXPOSE</span> <span style="color:#e6db74">8000</span><span style="color:#960050;background-color:#1e0010">
+</span></span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010">
+</span></span></span><span style="display:flex;"><span><span style="color:#66d9ef">CMD</span> [<span style="color:#e6db74">&#34;uvicorn&#34;</span>, <span style="color:#e6db74">&#34;main:app&#34;</span>, <span style="color:#e6db74">&#34;--host&#34;</span>, <span style="color:#e6db74">&#34;0.0.0.0&#34;</span>, <span style="color:#e6db74">&#34;--port&#34;</span>, <span style="color:#e6db74">&#34;8000&#34;</span>, <span style="color:#e6db74">&#34;--reload&#34;</span>]<span style="color:#960050;background-color:#1e0010">
+</span></span></span></code></pre></div><hr>
+<h3 id="-dockerfile-final">✅ Dockerfile final<a hidden class="anchor" aria-hidden="true" href="#-dockerfile-final">#</a></h3>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-dockerfile" data-lang="dockerfile"><span style="display:flex;"><span><span style="color:#66d9ef">FROM</span> <span style="color:#e6db74">python:3.11-slim</span><span style="color:#960050;background-color:#1e0010">
+</span></span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010">
+</span></span></span><span style="display:flex;"><span><span style="color:#66d9ef">ENV</span> PYTHONDONTWRITEBYTECODE<span style="color:#f92672">=</span><span style="color:#ae81ff">1</span> <span style="color:#ae81ff">\
+</span></span></span><span style="display:flex;"><span>    PYTHONUNBUFFERED<span style="color:#f92672">=</span><span style="color:#ae81ff">1</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">WORKDIR</span> <span style="color:#e6db74">/app</span><span style="color:#960050;background-color:#1e0010">
+</span></span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010">
+</span></span></span><span style="display:flex;"><span><span style="color:#66d9ef">RUN</span> apt-get update <span style="color:#ae81ff">\
+</span></span></span><span style="display:flex;"><span>  <span style="color:#f92672">&amp;&amp;</span> apt-get install -y --no-install-recommends build-essential <span style="color:#ae81ff">\
+</span></span></span><span style="display:flex;"><span>  <span style="color:#f92672">&amp;&amp;</span> rm -rf /var/lib/apt/lists/*<span style="color:#960050;background-color:#1e0010">
+</span></span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010">
+</span></span></span><span style="display:flex;"><span><span style="color:#66d9ef">COPY</span> setup/requirements.txt setup/requirements-dev.txt /app/<span style="color:#960050;background-color:#1e0010">
+</span></span></span><span style="display:flex;"><span><span style="color:#66d9ef">RUN</span> pip install --no-cache-dir -r requirements.txt -r requirements-dev.txt<span style="color:#960050;background-color:#1e0010">
+</span></span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010">
+</span></span></span><span style="display:flex;"><span><span style="color:#66d9ef">COPY</span> . /app<span style="color:#960050;background-color:#1e0010">
+</span></span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010">
+</span></span></span><span style="display:flex;"><span><span style="color:#66d9ef">EXPOSE</span> <span style="color:#e6db74">8000</span><span style="color:#960050;background-color:#1e0010">
+</span></span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010">
+</span></span></span><span style="display:flex;"><span><span style="color:#66d9ef">CMD</span> [<span style="color:#e6db74">&#34;uvicorn&#34;</span>, <span style="color:#e6db74">&#34;main:app&#34;</span>, <span style="color:#e6db74">&#34;--host&#34;</span>, <span style="color:#e6db74">&#34;0.0.0.0&#34;</span>, <span style="color:#e6db74">&#34;--port&#34;</span>, <span style="color:#e6db74">&#34;8000&#34;</span>, <span style="color:#e6db74">&#34;--reload&#34;</span>]<span style="color:#960050;background-color:#1e0010">
+</span></span></span></code></pre></div><hr>
+<h2 id="-dockerdocker-composeyml">📄 <code>docker/docker-compose.yml</code><a hidden class="anchor" aria-hidden="true" href="#-dockerdocker-composeyml">#</a></h2>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-yaml" data-lang="yaml"><span style="display:flex;"><span><span style="color:#f92672">services</span>:
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">api</span>:
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">build</span>:
+</span></span><span style="display:flex;"><span>      <span style="color:#f92672">context</span>: <span style="color:#ae81ff">..</span>
+</span></span><span style="display:flex;"><span>      <span style="color:#f92672">dockerfile</span>: <span style="color:#ae81ff">docker/Dockerfile</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">ports</span>:
+</span></span><span style="display:flex;"><span>      - <span style="color:#e6db74">&#34;8000:8000&#34;</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">volumes</span>:
+</span></span><span style="display:flex;"><span>      - <span style="color:#ae81ff">..:/app</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">environment</span>:
+</span></span><span style="display:flex;"><span>      - <span style="color:#ae81ff">PYTHONPATH=/app/src</span>
+</span></span></code></pre></div><hr>
+<h2 id="-makefile">🛠️ Makefile<a hidden class="anchor" aria-hidden="true" href="#-makefile">#</a></h2>
+<h3 id="-archivo-makefile">📄 Archivo <code>Makefile</code><a hidden class="anchor" aria-hidden="true" href="#-archivo-makefile">#</a></h3>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-makefile" data-lang="makefile"><span style="display:flex;"><span>COMPOSE_FILE<span style="color:#f92672">=</span>docker/docker-compose.yml
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">.PHONY</span><span style="color:#f92672">:</span> up down logs restart
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">up</span><span style="color:#f92672">:</span>
+</span></span><span style="display:flex;"><span>	docker compose -f <span style="color:#66d9ef">$(</span>COMPOSE_FILE<span style="color:#66d9ef">)</span> up --build
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">down</span><span style="color:#f92672">:</span>
+</span></span><span style="display:flex;"><span>	docker compose -f <span style="color:#66d9ef">$(</span>COMPOSE_FILE<span style="color:#66d9ef">)</span> down
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">logs</span><span style="color:#f92672">:</span>
+</span></span><span style="display:flex;"><span>	docker compose -f <span style="color:#66d9ef">$(</span>COMPOSE_FILE<span style="color:#66d9ef">)</span> logs -f
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">restart</span><span style="color:#f92672">:</span> down up
+</span></span></code></pre></div><hr>
+<h3 id="-qué-es-un-makefile">🧠 ¿Qué es un Makefile?<a hidden class="anchor" aria-hidden="true" href="#-qué-es-un-makefile">#</a></h3>
+<p>Un <strong>Makefile</strong> define atajos de comandos para trabajar más cómodo. No es Python ni forma parte del dominio.</p>
+<hr>
+<h3 id="-comandos-disponibles">▶️ Comandos disponibles<a hidden class="anchor" aria-hidden="true" href="#-comandos-disponibles">#</a></h3>
+<ul>
+<li><code>make up</code> → levanta el proyecto</li>
+<li><code>make down</code> → para el proyecto</li>
+<li><code>make logs</code> → muestra logs</li>
+<li><code>make restart</code> → reinicia todo</li>
+</ul>
+<hr>
+<h2 id="-check-final">✔️ Check final<a hidden class="anchor" aria-hidden="true" href="#-check-final">#</a></h2>
+<p>Antes de continuar con el curso, deberías poder decir:</p>
+<ul>
+<li><input disabled="" type="checkbox"> Sé explicar con mis propias palabras qué es Docker</li>
+<li><input disabled="" type="checkbox"> Entiendo por qué no instalamos Python en mi ordenador</li>
+<li><input disabled="" type="checkbox"> Sé qué diferencia hay entre <code>Dockerfile</code> y <code>docker-compose.yml</code></li>
+<li><input disabled="" type="checkbox"> Soy capaz de arrancar y parar el proyecto usando <code>make</code></li>
+<li><input disabled="" type="checkbox"> Puedo acceder a la API y a la documentación en el navegador</li>
+</ul>
+<hr>
+<h2 id="-ejercicios">🧪 Ejercicios<a hidden class="anchor" aria-hidden="true" href="#-ejercicios">#</a></h2>
+<ol>
+<li>Cambia el título de la API en <code>main.py</code> y recarga el navegador.</li>
+<li>Cambia el puerto <code>8000</code> por <code>8001</code> y comprueba que sigue funcionando.</li>
+<li>Para el contenedor y vuelve a levantarlo usando solo <code>make</code>.</li>
+</ol>
+<hr>
+<h2 id="-errores-típicos">❌ Errores típicos<a hidden class="anchor" aria-hidden="true" href="#-errores-típicos">#</a></h2>
+<ul>
+<li><strong>Dockerfile not found</strong> → ruta incorrecta en <code>docker-compose.yml</code></li>
+<li><strong>Port already in use</strong> → otro proceso usa el puerto 8000</li>
+<li><strong>Cambios no se reflejan</strong> → revisa el volumen</li>
+</ul>
+<hr>
+<h2 id="-glosario-rápido">📘 Glosario rápido<a hidden class="anchor" aria-hidden="true" href="#-glosario-rápido">#</a></h2>
+<ul>
+<li><strong>Imagen</strong>: plantilla para crear contenedores</li>
+<li><strong>Contenedor</strong>: instancia en ejecución de una imagen</li>
+<li><strong>Dockerfile</strong>: receta para crear una imagen</li>
+<li><strong>docker-compose</strong>: orquestador de contenedores</li>
+</ul>
+<hr>
+
+
+  </div>
+
+  <footer class="post-footer">
+    <ul class="post-tags">
+    </ul>
+<nav class="paginav">
+  <a class="next" href="http://localhost:1313/ddd-fastapi-rentals/curso-ddd-fastapi/pensar-antes-de-programar/">
+    <span class="title">Next »</span>
+    <br>
+    <span>Dominio: pensar antes de programar</span>
+  </a>
+</nav>
+
+  </footer>
+</article>
+    </main>
+    
+<footer class="footer">
+        <span>&copy; 2025 <a href="http://localhost:1313/ddd-fastapi-rentals/">Blog de acarres</a></span> · 
+
+    <span>
+        Powered by
+        <a href="https://gohugo.io/" rel="noopener noreferrer" target="_blank">Hugo</a> &
+        <a href="https://github.com/adityatelange/hugo-PaperMod/" rel="noopener" target="_blank">PaperMod</a>
+    </span>
+</footer>
+<a href="#top" aria-label="go to top" title="Go to Top (Alt + G)" class="top-link" id="top-link" accesskey="g">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 12 6" fill="currentColor">
+        <path d="M12 6H0l6-6z" />
+    </svg>
+</a>
+
+<script>
+    let menu = document.getElementById('menu');
+    if (menu) {
+        
+        const scrollPosition = localStorage.getItem("menu-scroll-position");
+        if (scrollPosition) {
+            menu.scrollLeft = parseInt(scrollPosition, 10);
+        }
+        
+        menu.onscroll = function () {
+            localStorage.setItem("menu-scroll-position", menu.scrollLeft);
+        }
+    }
+
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+        anchor.addEventListener("click", function (e) {
+            e.preventDefault();
+            var id = this.getAttribute("href").substr(1);
+            if (!window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+                document.querySelector(`[id='${decodeURIComponent(id)}']`).scrollIntoView({
+                    behavior: "smooth"
+                });
+            } else {
+                document.querySelector(`[id='${decodeURIComponent(id)}']`).scrollIntoView();
+            }
+            if (id === "top") {
+                history.replaceState(null, null, " ");
+            } else {
+                history.pushState(null, null, `#${id}`);
+            }
+        });
+    });
+
+</script>
+<script>
+    var mybutton = document.getElementById("top-link");
+    window.onscroll = function () {
+        if (document.body.scrollTop > 800 || document.documentElement.scrollTop > 800) {
+            mybutton.style.visibility = "visible";
+            mybutton.style.opacity = "1";
+        } else {
+            mybutton.style.visibility = "hidden";
+            mybutton.style.opacity = "0";
+        }
+    };
+
+</script>
+<script>
+    document.getElementById("theme-toggle").addEventListener("click", () => {
+        const html = document.querySelector("html");
+        if (html.dataset.theme === "dark") {
+            html.dataset.theme = 'light';
+            localStorage.setItem("pref-theme", 'light');
+        } else {
+            html.dataset.theme = 'dark';
+            localStorage.setItem("pref-theme", 'dark');
+        }
+    })
+
+</script>
+</body>
+
+</html>

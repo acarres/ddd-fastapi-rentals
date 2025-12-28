@@ -19,7 +19,7 @@ También aprovechar para aprender [Hugo](https://gohugo.io/)
   - [2.2 — Entidades y Value Objects](entidades-value-objects)
   - [2.3 — Test de dominio](test-de-dominio)
 - 🧭 BLOQUE 3 — Application Layer
-  - 3.1 — Application Layer: qué es y qué no es
+  - [3.1 — Application Layer: qué es y qué no es](que-es-application-layer)
   - 3.2 — Casos de uso
   - 3.3 — Tests de Application Layer
 - 🗄️ BLOQUE 4 — Persistencia y Consistencia
@@ -41,3 +41,14 @@ También aprovechar para aprender [Hugo](https://gohugo.io/)
   - 7.1 — IA como asistente de diseño
   - 7.2 — IA para explorar reglas de negocio
   - 7.3 — IA para tests y refactor
+
+---
+
+> 🔍 **Sobre el “Check final”**
+> Al final de cada capítulo encontrarás un **Check final**.
+> No es un examen ni algo que tengas que entregar.
+> Es una lista de verificación para que compruebes si has entendido lo mínimo necesario para continuar.
+>
+> Si no puedes marcar todos los puntos, no pasa nada: vuelve a leer el capítulo con calma antes de seguir.
+
+---

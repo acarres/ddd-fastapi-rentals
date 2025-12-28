@@ -124,38 +124,88 @@
 <p>También aprovechar para aprender <a href="https://gohugo.io/">Hugo</a></p>
 <h2 id="índice">Índice<a hidden class="anchor" aria-hidden="true" href="#índice">#</a></h2>
 <ul>
-<li><a href="01-setup-docker">01 — Setup con Docker</a></li>
-<li><a href="02-dominio">02 — Dominio: pensar antes de programar</a></li>
-<li><a href="03-entidades-value-objects">03 — Entidades y Value Objects</a></li>
+<li>🧱 BLOQUE 1 — Fundamentos y entorno
+<ul>
+<li><a href="setup-docker">1.1 — Setup con Docker</a></li>
 </ul>
-<h2 id="cómo-usar-estos-apuntes">Cómo usar estos apuntes<a hidden class="anchor" aria-hidden="true" href="#cómo-usar-estos-apuntes">#</a></h2>
-<ol>
-<li>Lee el capítulo.</li>
-<li>Ejecuta el “check final”.</li>
-<li>Haz los ejercicios.</li>
-<li>Si algo falla, mira “Troubleshooting”.</li>
-</ol>
+</li>
+<li>🧠 BLOQUE 2 — Modelado del dominio
+<ul>
+<li><a href="pensar-antes-de-programar">2.1 - Pensar antes de programar</a></li>
+<li><a href="entidades-value-objects">2.2 — Entidades y Value Objects</a></li>
+<li><a href="test-de-dominio">2.3 — Test de dominio</a></li>
+</ul>
+</li>
+<li>🧭 BLOQUE 3 — Application Layer
+<ul>
+<li><a href="que-es-application-layer">3.1 — Application Layer: qué es y qué no es</a></li>
+<li>3.2 — Casos de uso</li>
+<li>3.3 — Tests de Application Layer</li>
+</ul>
+</li>
+<li>🗄️ BLOQUE 4 — Persistencia y Consistencia
+<ul>
+<li>4.1 — Repositorios (interfaces de dominio)</li>
+<li>4.2 — Repositorios en memoria</li>
+<li>4.3 — Unit of Work</li>
+<li>4.4 — Transacciones y consistencia</li>
+</ul>
+</li>
+<li>🧩 BLOQUE 5 — Arquitectura de Application Avanzada
+<ul>
+<li>5.1 — Commands</li>
+<li>5.2 — Handlers</li>
+<li>5.3 — Separación intención / ejecución</li>
+<li>5.4 — Introducción a CQRS</li>
+</ul>
+</li>
+<li>🌐 BLOQUE 6 — Interfaces e Infraestructura
+<ul>
+<li>6.1 — FastAPI como capa de entrada</li>
+<li>6.2 — DTOs y mapeo</li>
+<li>6.3 — Persistencia real (SQLAlchemy)</li>
+<li>6.4 — Configuración e infraestructura</li>
+</ul>
+</li>
+<li>🤖 BLOQUE 7 — IA como apoyo al diseño
+<ul>
+<li>7.1 — IA como asistente de diseño</li>
+<li>7.2 — IA para explorar reglas de negocio</li>
+<li>7.3 — IA para tests y refactor</li>
+</ul>
+</li>
+</ul>
+<hr>
+<blockquote>
+<p>🔍 <strong>Sobre el “Check final”</strong>
+Al final de cada capítulo encontrarás un <strong>Check final</strong>.
+No es un examen ni algo que tengas que entregar.
+Es una lista de verificación para que compruebes si has entendido lo mínimo necesario para continuar.</p>
+<p>Si no puedes marcar todos los puntos, no pasa nada: vuelve a leer el capítulo con calma antes de seguir.</p>
+</blockquote>
+<hr>
 
 
 </div>
 
 <article class="post-entry"> 
   <header class="entry-header">
-    <h2 class="entry-hint-parent">Capítulo 1 – Setup profesional desde cero con Docker
+    <h2 class="entry-hint-parent">Setup profesional desde cero con Docker
     </h2>
   </header>
   <div class="entry-content">
-    <p>Qué vas a aprender En este capítulo vas a aprender:
+    <p> En este capítulo vamos a preparar el entorno de trabajo sobre el que construiremos todo el curso. No vamos a aprender Python todavía. Vamos a asegurarnos de que el entorno no sea un problema.
+🎯 Qué vas a aprender En este capítulo vas a aprender:
 Por qué no instalar nada en tu ordenador es una buena decisión Qué es Docker y para qué lo usamos en este curso Cómo montar un entorno profesional desde cero Cómo arrancar una API real sin conocer Python Cómo trabajar de forma cómoda usando make Objetivo final del capítulo: tener una API funcionando en tu máquina sin ensuciar tu sistema.
 ...</p>
   </div>
   <footer class="entry-footer"></footer>
-  <a class="entry-link" aria-label="post link to Capítulo 1 – Setup profesional desde cero con Docker" href="http://localhost:1313/ddd-fastapi-rentals/curso-ddd-fastapi/01-setup-docker/"></a>
+  <a class="entry-link" aria-label="post link to Setup profesional desde cero con Docker" href="http://localhost:1313/ddd-fastapi-rentals/curso-ddd-fastapi/setup-docker/"></a>
 </article>
 
 <article class="post-entry"> 
   <header class="entry-header">
-    <h2 class="entry-hint-parent">Capítulo 2 – Dominio: pensar antes de programar
+    <h2 class="entry-hint-parent">Dominio: pensar antes de programar
     </h2>
   </header>
   <div class="entry-content">
@@ -164,12 +214,12 @@ Qué significa realmente dominio en Domain-Driven Design Por qué el dominio es 
 ...</p>
   </div>
   <footer class="entry-footer"></footer>
-  <a class="entry-link" aria-label="post link to Capítulo 2 – Dominio: pensar antes de programar" href="http://localhost:1313/ddd-fastapi-rentals/curso-ddd-fastapi/02-dominio/"></a>
+  <a class="entry-link" aria-label="post link to Dominio: pensar antes de programar" href="http://localhost:1313/ddd-fastapi-rentals/curso-ddd-fastapi/pensar-antes-de-programar/"></a>
 </article>
 
 <article class="post-entry"> 
   <header class="entry-header">
-    <h2 class="entry-hint-parent">Capítulo 3 – Entidades y Value Objects
+    <h2 class="entry-hint-parent">Entidades y Value Objects
     </h2>
   </header>
   <div class="entry-content">
@@ -179,7 +229,37 @@ qué es negocio (DDD) qué es lenguaje (Python) Este capítulo está diseñado p
 ...</p>
   </div>
   <footer class="entry-footer"></footer>
-  <a class="entry-link" aria-label="post link to Capítulo 3 – Entidades y Value Objects" href="http://localhost:1313/ddd-fastapi-rentals/curso-ddd-fastapi/03-entidades-value-objects/"></a>
+  <a class="entry-link" aria-label="post link to Entidades y Value Objects" href="http://localhost:1313/ddd-fastapi-rentals/curso-ddd-fastapi/entidades-value-objects/"></a>
+</article>
+
+<article class="post-entry"> 
+  <header class="entry-header">
+    <h2 class="entry-hint-parent">Tests de dominio
+    </h2>
+  </header>
+  <div class="entry-content">
+    <p> En este capítulo aprendemos a probar el dominio, no el framework ni la base de datos. Los tests sirven para validar reglas de negocio y darnos confianza para cambiar el código.
+Este capítulo está pensado para alguien que no conoce ni Python ni testing.
+🎯 Objetivo del capítulo Entender qué es un test Entender por qué en DDD se testea primero el dominio Aprender pytest desde cero Escribir tests para Value Objects y Entidades Aprender a ejecutar tests de forma cómoda con Makefile 🧩 Conceptos de DDD introducidos en este capítulo En esta sección no hablamos de Python.
+...</p>
+  </div>
+  <footer class="entry-footer"></footer>
+  <a class="entry-link" aria-label="post link to Tests de dominio" href="http://localhost:1313/ddd-fastapi-rentals/curso-ddd-fastapi/test-de-dominio/"></a>
+</article>
+
+<article class="post-entry"> 
+  <header class="entry-header">
+    <h2 class="entry-hint-parent">Application Layer: qué es y qué no es
+    </h2>
+  </header>
+  <div class="entry-content">
+    <p> 3.1 — Application Layer: qué es y qué no es 🧭 Bloque 3 — Application Layer En este capítulo introducimos una de las capas más mal entendidas del software. La Application Layer no contiene reglas de negocio, pero sin ella el sistema no funciona.
+🎯 Qué vas a aprender En este capítulo vas a aprender:
+Qué es la Application Layer en DDD Qué problema resuelve Qué responsabilidades tiene Qué NO debe hacer nunca Cómo se relaciona con el dominio Objetivo del capítulo: saber dónde poner cada cosa y evitar sistemas caóticos.
+...</p>
+  </div>
+  <footer class="entry-footer"></footer>
+  <a class="entry-link" aria-label="post link to Application Layer: qué es y qué no es" href="http://localhost:1313/ddd-fastapi-rentals/curso-ddd-fastapi/que-es-application-layer/"></a>
 </article>
     </main>
     

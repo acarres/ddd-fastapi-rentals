@@ -11,4 +11,4 @@ weight = 1
 [params]
   ShowPostNavLinks = true
   ShowBreadCrumbs = true
-  mainSections = ["posts"]
+  mainSections = ["posts", "curso-ddd-fastapi"]

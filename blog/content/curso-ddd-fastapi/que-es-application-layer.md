@@ -188,9 +188,3 @@ Antes de continuar, deberías poder decir:
 * [ ] Entiendo la diferencia entre dominio y aplicación
 
 ---
-
-## 🔜 Próximo capítulo
-
-En el **Capítulo 3.2** implementaremos nuestro primer **caso de uso real**.
-
-Continuamos 🚀

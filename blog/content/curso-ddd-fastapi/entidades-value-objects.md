@@ -302,11 +302,3 @@ Antes de continuar deberías poder explicar:
 * por qué `DomainError` es abstracta
 
 ---
-
-## 🔜 Próximo capítulo
-
-En el **Capítulo 04 — Tests de dominio** aprenderemos a:
-
-> validar reglas del negocio con tests automáticos.
-
-Continuamos 🚀

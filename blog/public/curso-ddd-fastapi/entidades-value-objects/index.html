@@ -1,0 +1,460 @@
+<!DOCTYPE html>
+<html lang="en" dir="auto" data-theme="auto">
+
+<head><script src="/ddd-fastapi-rentals/livereload.js?mindelay=10&amp;v=2&amp;port=1313&amp;path=ddd-fastapi-rentals/livereload" data-no-instant defer></script><meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<meta name="robots" content="noindex, nofollow">
+<title>Entidades y Value Objects | Blog de acarres</title>
+<meta name="keywords" content="">
+<meta name="description" content="
+En este capítulo empezamos a escribir código, pero manteniendo una separación estricta entre:
+
+qué es negocio (DDD)
+qué es lenguaje (Python)
+
+
+Este capítulo está diseñado para alguien que no conoce ni DDD ni Python.
+
+🎯 Objetivo del capítulo
+
+Entender qué son Entidades y Value Objects en DDD
+Entender qué problemas resuelven
+Aprender cómo se representan en Python desde cero
+Construir el primer modelo de dominio correcto y protegido
+
+
+🧩 Conceptos de DDD introducidos en este capítulo
+En esta sección no hablamos de Python.
+Solo hablamos de modelado del dominio.">
+<meta name="author" content="">
+<link rel="canonical" href="http://localhost:1313/ddd-fastapi-rentals/curso-ddd-fastapi/entidades-value-objects/">
+<link crossorigin="anonymous" href="/ddd-fastapi-rentals/assets/css/stylesheet.343cc480b9ffc8f04ccbe5e968ad674880cab773ec19905e93033065c1e7a804.css" integrity="sha256-NDzEgLn/yPBMy&#43;XpaK1nSIDKt3PsGZBekwMwZcHnqAQ=" rel="preload stylesheet" as="style">
+<link rel="icon" href="http://localhost:1313/ddd-fastapi-rentals/favicon.ico">
+<link rel="icon" type="image/png" sizes="16x16" href="http://localhost:1313/ddd-fastapi-rentals/favicon-16x16.png">
+<link rel="icon" type="image/png" sizes="32x32" href="http://localhost:1313/ddd-fastapi-rentals/favicon-32x32.png">
+<link rel="apple-touch-icon" href="http://localhost:1313/ddd-fastapi-rentals/apple-touch-icon.png">
+<link rel="mask-icon" href="http://localhost:1313/ddd-fastapi-rentals/safari-pinned-tab.svg">
+<meta name="theme-color" content="#2e2e33">
+<meta name="msapplication-TileColor" content="#2e2e33">
+<link rel="alternate" hreflang="en" href="http://localhost:1313/ddd-fastapi-rentals/curso-ddd-fastapi/entidades-value-objects/">
+<noscript>
+    <style>
+        #theme-toggle,
+        .top-link {
+            display: none;
+        }
+
+    </style>
+    <style>
+        @media (prefers-color-scheme: dark) {
+            :root {
+                --theme: rgb(29, 30, 32);
+                --entry: rgb(46, 46, 51);
+                --primary: rgb(218, 218, 219);
+                --secondary: rgb(155, 156, 157);
+                --tertiary: rgb(65, 66, 68);
+                --content: rgb(196, 196, 197);
+                --code-block-bg: rgb(46, 46, 51);
+                --code-bg: rgb(55, 56, 62);
+                --border: rgb(51, 51, 51);
+                color-scheme: dark;
+            }
+
+            .list {
+                background: var(--theme);
+            }
+
+            .toc {
+                background: var(--entry);
+            }
+        }
+
+        @media (prefers-color-scheme: light) {
+            .list::-webkit-scrollbar-thumb {
+                border-color: var(--code-bg);
+            }
+        }
+
+    </style>
+</noscript>
+<script>
+    if (localStorage.getItem("pref-theme") === "dark") {
+        document.querySelector("html").dataset.theme = 'dark';
+    } else if (localStorage.getItem("pref-theme") === "light") {
+       document.querySelector("html").dataset.theme = 'light';
+    } else if (window.matchMedia('(prefers-color-scheme: dark)').matches) {
+        document.querySelector("html").dataset.theme = 'dark';
+    } else {
+        document.querySelector("html").dataset.theme = 'light';
+    }
+
+</script>
+</head>
+<body id="top">
+    <header class="header">
+    <nav class="nav">
+        <div class="logo">
+            <a href="http://localhost:1313/ddd-fastapi-rentals/" accesskey="h" title="Blog de acarres (Alt + H)">Blog de acarres</a>
+            <div class="logo-switches">
+                <button id="theme-toggle" accesskey="t" title="(Alt + T)" aria-label="Toggle theme">
+                    <svg id="moon" xmlns="http://www.w3.org/2000/svg" width="24" height="18" viewBox="0 0 24 24"
+                        fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                        stroke-linejoin="round">
+                        <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+                    </svg>
+                    <svg id="sun" xmlns="http://www.w3.org/2000/svg" width="24" height="18" viewBox="0 0 24 24"
+                        fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                        stroke-linejoin="round">
+                        <circle cx="12" cy="12" r="5"></circle>
+                        <line x1="12" y1="1" x2="12" y2="3"></line>
+                        <line x1="12" y1="21" x2="12" y2="23"></line>
+                        <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+                        <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+                        <line x1="1" y1="12" x2="3" y2="12"></line>
+                        <line x1="21" y1="12" x2="23" y2="12"></line>
+                        <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+                        <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+                    </svg>
+                </button>
+            </div>
+        </div>
+        <ul id="menu">
+            <li>
+                <a href="http://localhost:1313/ddd-fastapi-rentals/curso-ddd-fastapi/" title="Currso DDD y Python con Fastapi">
+                    <span>Currso DDD y Python con Fastapi</span>
+                </a>
+            </li>
+        </ul>
+    </nav>
+</header>
+<main class="main">
+
+<article class="post-single">
+  <header class="post-header">
+    <div class="breadcrumbs"><a href="http://localhost:1313/ddd-fastapi-rentals/">Home</a>&nbsp;»&nbsp;<a href="http://localhost:1313/ddd-fastapi-rentals/curso-ddd-fastapi/">Curso DDD con FastAPI</a></div>
+    <h1 class="post-title entry-hint-parent">
+      Entidades y Value Objects
+    </h1>
+    <div class="post-meta">
+
+</div>
+  </header> 
+  <div class="post-content"><blockquote>
+<p>En este capítulo empezamos a escribir <strong>código</strong>, pero manteniendo una separación estricta entre:</p>
+<ul>
+<li><strong>qué es negocio (DDD)</strong></li>
+<li><strong>qué es lenguaje (Python)</strong></li>
+</ul>
+</blockquote>
+<p>Este capítulo está diseñado para alguien que <strong>no conoce ni DDD ni Python</strong>.</p>
+<hr>
+<h2 id="-objetivo-del-capítulo">🎯 Objetivo del capítulo<a hidden class="anchor" aria-hidden="true" href="#-objetivo-del-capítulo">#</a></h2>
+<ul>
+<li>Entender qué son <strong>Entidades</strong> y <strong>Value Objects</strong> en DDD</li>
+<li>Entender qué problemas resuelven</li>
+<li>Aprender cómo se representan en <strong>Python desde cero</strong></li>
+<li>Construir el primer modelo de dominio <strong>correcto y protegido</strong></li>
+</ul>
+<hr>
+<h2 id="-conceptos-de-ddd-introducidos-en-este-capítulo">🧩 Conceptos de DDD introducidos en este capítulo<a hidden class="anchor" aria-hidden="true" href="#-conceptos-de-ddd-introducidos-en-este-capítulo">#</a></h2>
+<p>En esta sección <strong>no hablamos de Python</strong>.
+Solo hablamos de <strong>modelado del dominio</strong>.</p>
+<h3 id="entidad">Entidad<a hidden class="anchor" aria-hidden="true" href="#entidad">#</a></h3>
+<p>Una <strong>Entidad</strong> es un concepto del dominio que:</p>
+<ul>
+<li>tiene identidad propia</li>
+<li>sigue siendo el mismo aunque cambien sus datos</li>
+<li>puede cambiar con el tiempo</li>
+</ul>
+<p>Ejemplo en el mundo real:</p>
+<ul>
+<li>un contrato</li>
+<li>una reserva</li>
+<li>una persona</li>
+</ul>
+<p>En nuestro dominio, <code>Booking</code> es una Entidad.</p>
+<hr>
+<h3 id="value-object">Value Object<a hidden class="anchor" aria-hidden="true" href="#value-object">#</a></h3>
+<p>Un <strong>Value Object</strong> es un concepto del dominio que:</p>
+<ul>
+<li>no tiene identidad</li>
+<li>se define solo por sus valores</li>
+<li>es inmutable</li>
+<li>protege reglas del negocio</li>
+</ul>
+<p>Ejemplo:</p>
+<ul>
+<li>un rango de fechas</li>
+<li>un precio</li>
+<li>una dirección</li>
+</ul>
+<p>En nuestro dominio, <code>DateRange</code> es un Value Object.</p>
+<hr>
+<h3 id="invariantes">Invariantes<a hidden class="anchor" aria-hidden="true" href="#invariantes">#</a></h3>
+<p>Una <strong>invariante</strong> es una regla del dominio que <strong>nunca puede romperse</strong>.</p>
+<p>Ejemplo:</p>
+<ul>
+<li>la fecha de inicio debe ser anterior a la fecha de fin</li>
+</ul>
+<p>Si una invariante se rompe, el objeto <strong>no debe existir</strong>.</p>
+<hr>
+<h3 id="estados-del-dominio">Estados del dominio<a hidden class="anchor" aria-hidden="true" href="#estados-del-dominio">#</a></h3>
+<p>Algunos conceptos del dominio tienen <strong>estados finitos</strong>.</p>
+<p>Ejemplo:</p>
+<ul>
+<li>una reserva puede estar <code>ACTIVE</code>, <code>CANCELLED</code> o <code>FINISHED</code></li>
+</ul>
+<p>Un estado:</p>
+<ul>
+<li>no es texto libre</li>
+<li>define qué operaciones están permitidas</li>
+</ul>
+<hr>
+<h3 id="errores-de-dominio">Errores de dominio<a hidden class="anchor" aria-hidden="true" href="#errores-de-dominio">#</a></h3>
+<p>Un <strong>error de dominio</strong> representa una regla del negocio que se ha violado.</p>
+<p>No es un error técnico.
+Es una decisión del negocio.</p>
+<hr>
+<h3 id="shared-shared-kernel">Shared (Shared Kernel)<a hidden class="anchor" aria-hidden="true" href="#shared-shared-kernel">#</a></h3>
+<p><code>shared</code> contiene conceptos:</p>
+<ul>
+<li>genéricos</li>
+<li>reutilizables</li>
+<li>independientes de un dominio concreto</li>
+</ul>
+<p>Ejemplo:</p>
+<ul>
+<li><code>DateRange</code></li>
+<li><code>DomainError</code></li>
+</ul>
+<hr>
+<h2 id="-conceptos-de-python-introducidos-en-este-capítulo">🐍 Conceptos de Python introducidos en este capítulo<a hidden class="anchor" aria-hidden="true" href="#-conceptos-de-python-introducidos-en-este-capítulo">#</a></h2>
+<p>En esta sección <strong>no hablamos de negocio</strong>.
+Solo explicamos <strong>el lenguaje Python</strong>.</p>
+<h3 id="class"><code>class</code><a hidden class="anchor" aria-hidden="true" href="#class">#</a></h3>
+<p>Permite definir un nuevo tipo.</p>
+<hr>
+<h3 id="dataclass"><code>@dataclass</code><a hidden class="anchor" aria-hidden="true" href="#dataclass">#</a></h3>
+<p>Genera automáticamente código repetitivo.</p>
+<hr>
+<h3 id="frozentrue"><code>frozen=True</code><a hidden class="anchor" aria-hidden="true" href="#frozentrue">#</a></h3>
+<p>Hace que un objeto sea inmutable.</p>
+<hr>
+<h3 id="enum"><code>Enum</code><a hidden class="anchor" aria-hidden="true" href="#enum">#</a></h3>
+<p>Representa un conjunto cerrado de valores posibles.</p>
+<hr>
+<h3 id="exception-y-raise"><code>Exception</code> y <code>raise</code><a hidden class="anchor" aria-hidden="true" href="#exception-y-raise">#</a></h3>
+<p>Permiten lanzar y capturar errores.</p>
+<hr>
+<h3 id="clases-abstractas-abc">Clases abstractas (<code>ABC</code>)<a hidden class="anchor" aria-hidden="true" href="#clases-abstractas-abc">#</a></h3>
+<p>Permiten definir clases que <strong>no se pueden instanciar</strong>.</p>
+<hr>
+<h3 id="pass"><code>pass</code><a hidden class="anchor" aria-hidden="true" href="#pass">#</a></h3>
+<p>Indica un bloque vacío intencional.</p>
+<hr>
+<h3 id="--type-type-hints"><code>-&gt; &quot;Type&quot;</code> (type hints)<a hidden class="anchor" aria-hidden="true" href="#--type-type-hints">#</a></h3>
+<p>Indica el tipo de valor que devuelve una función.</p>
+<hr>
+<h3 id="__post_init__"><code>__post_init__</code><a hidden class="anchor" aria-hidden="true" href="#__post_init__">#</a></h3>
+<p>Método especial de <code>dataclass</code> que se ejecuta tras crear el objeto.</p>
+<hr>
+<h2 id="-aplicación-al-dominio-ddd--python-juntos">🧱 Aplicación al dominio (DDD + Python juntos)<a hidden class="anchor" aria-hidden="true" href="#-aplicación-al-dominio-ddd--python-juntos">#</a></h2>
+<h3 id="estructura-del-proyecto">Estructura del proyecto<a hidden class="anchor" aria-hidden="true" href="#estructura-del-proyecto">#</a></h3>
+<pre tabindex="0"><code>src/
+  shared/
+    domain/
+      errors/
+        domain_error.py
+        invalid_date_range.py
+      value_objects/
+        date_range.py
+
+  rentals/
+    booking/
+      domain/
+        booking.py
+        booking_status.py
+        errors/
+          booking_not_active.py
+</code></pre><hr>
+<h3 id="error-base-del-dominio-python">Error base del dominio (Python)<a hidden class="anchor" aria-hidden="true" href="#error-base-del-dominio-python">#</a></h3>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#f92672">from</span> abc <span style="color:#f92672">import</span> ABC
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">class</span> <span style="color:#a6e22e">DomainError</span>(<span style="color:#a6e22e">Exception</span>, ABC):
+</span></span><span style="display:flex;"><span>    <span style="color:#e6db74">&#34;&#34;&#34;Base class for domain errors.&#34;&#34;&#34;</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">pass</span>
+</span></span></code></pre></div><hr>
+<h3 id="error-concreto-del-dominio">Error concreto del dominio<a hidden class="anchor" aria-hidden="true" href="#error-concreto-del-dominio">#</a></h3>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#f92672">from</span> shared.domain.errors.domain_error <span style="color:#f92672">import</span> DomainError
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">class</span> <span style="color:#a6e22e">InvalidDateRange</span>(DomainError):
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">pass</span>
+</span></span></code></pre></div><hr>
+<h3 id="value-object-daterange">Value Object: DateRange<a hidden class="anchor" aria-hidden="true" href="#value-object-daterange">#</a></h3>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#f92672">from</span> dataclasses <span style="color:#f92672">import</span> dataclass
+</span></span><span style="display:flex;"><span><span style="color:#f92672">from</span> datetime <span style="color:#f92672">import</span> date
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">from</span> shared.domain.errors.invalid_date_range <span style="color:#f92672">import</span> InvalidDateRange
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">@dataclass</span>(frozen<span style="color:#f92672">=</span><span style="color:#66d9ef">True</span>)
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">class</span> <span style="color:#a6e22e">DateRange</span>:
+</span></span><span style="display:flex;"><span>    start_date: date
+</span></span><span style="display:flex;"><span>    end_date: date
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">def</span> <span style="color:#a6e22e">__post_init__</span>(self) <span style="color:#f92672">-&gt;</span> <span style="color:#66d9ef">None</span>:
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">if</span> self<span style="color:#f92672">.</span>start_date <span style="color:#f92672">&gt;</span> self<span style="color:#f92672">.</span>end_date:
+</span></span><span style="display:flex;"><span>            <span style="color:#66d9ef">raise</span> InvalidDateRange()
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">def</span> <span style="color:#a6e22e">contains</span>(self, value: date) <span style="color:#f92672">-&gt;</span> bool:
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">return</span> self<span style="color:#f92672">.</span>start_date <span style="color:#f92672">&lt;=</span> value <span style="color:#f92672">&lt;=</span> self<span style="color:#f92672">.</span>end_date
+</span></span></code></pre></div><hr>
+<h3 id="estado-del-dominio-con-enum">Estado del dominio con Enum<a hidden class="anchor" aria-hidden="true" href="#estado-del-dominio-con-enum">#</a></h3>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#f92672">from</span> enum <span style="color:#f92672">import</span> Enum
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">class</span> <span style="color:#a6e22e">BookingStatus</span>(Enum):
+</span></span><span style="display:flex;"><span>    ACTIVE <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;ACTIVE&#34;</span>
+</span></span><span style="display:flex;"><span>    CANCELLED <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;CANCELLED&#34;</span>
+</span></span><span style="display:flex;"><span>    FINISHED <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;FINISHED&#34;</span>
+</span></span></code></pre></div><hr>
+<h3 id="entidad-booking">Entidad: Booking<a hidden class="anchor" aria-hidden="true" href="#entidad-booking">#</a></h3>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#f92672">from</span> dataclasses <span style="color:#f92672">import</span> dataclass
+</span></span><span style="display:flex;"><span><span style="color:#f92672">from</span> uuid <span style="color:#f92672">import</span> UUID, uuid4
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">from</span> shared.domain.value_objects.date_range <span style="color:#f92672">import</span> DateRange
+</span></span><span style="display:flex;"><span><span style="color:#f92672">from</span> .booking_status <span style="color:#f92672">import</span> BookingStatus
+</span></span><span style="display:flex;"><span><span style="color:#f92672">from</span> .errors.booking_not_active <span style="color:#f92672">import</span> BookingNotActive
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">@dataclass</span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">class</span> <span style="color:#a6e22e">Booking</span>:
+</span></span><span style="display:flex;"><span>    id: UUID
+</span></span><span style="display:flex;"><span>    date_range: DateRange
+</span></span><span style="display:flex;"><span>    status: BookingStatus
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">@staticmethod</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">def</span> <span style="color:#a6e22e">create</span>(date_range: DateRange) <span style="color:#f92672">-&gt;</span> <span style="color:#e6db74">&#34;Booking&#34;</span>:
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">return</span> Booking(
+</span></span><span style="display:flex;"><span>            id<span style="color:#f92672">=</span>uuid4(),
+</span></span><span style="display:flex;"><span>            date_range<span style="color:#f92672">=</span>date_range,
+</span></span><span style="display:flex;"><span>            status<span style="color:#f92672">=</span>BookingStatus<span style="color:#f92672">.</span>ACTIVE,
+</span></span><span style="display:flex;"><span>        )
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">def</span> <span style="color:#a6e22e">cancel</span>(self) <span style="color:#f92672">-&gt;</span> <span style="color:#66d9ef">None</span>:
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">if</span> self<span style="color:#f92672">.</span>status <span style="color:#f92672">is</span> <span style="color:#f92672">not</span> BookingStatus<span style="color:#f92672">.</span>ACTIVE:
+</span></span><span style="display:flex;"><span>            <span style="color:#66d9ef">raise</span> BookingNotActive()
+</span></span><span style="display:flex;"><span>        self<span style="color:#f92672">.</span>status <span style="color:#f92672">=</span> BookingStatus<span style="color:#f92672">.</span>CANCELLED
+</span></span></code></pre></div><hr>
+<h2 id="-check-final">✅ Check final<a hidden class="anchor" aria-hidden="true" href="#-check-final">#</a></h2>
+<p>Antes de continuar deberías poder explicar:</p>
+<ul>
+<li>qué es una Entidad</li>
+<li>qué es un Value Object</li>
+<li>qué es una invariante</li>
+<li>por qué <code>status</code> no es un <code>str</code></li>
+<li>qué es <code>Enum</code></li>
+<li>qué es una excepción de dominio</li>
+<li>por qué <code>DomainError</code> es abstracta</li>
+</ul>
+<hr>
+
+
+  </div>
+
+  <footer class="post-footer">
+    <ul class="post-tags">
+    </ul>
+<nav class="paginav">
+  <a class="prev" href="http://localhost:1313/ddd-fastapi-rentals/curso-ddd-fastapi/pensar-antes-de-programar/">
+    <span class="title">« Prev</span>
+    <br>
+    <span>Dominio: pensar antes de programar</span>
+  </a>
+  <a class="next" href="http://localhost:1313/ddd-fastapi-rentals/curso-ddd-fastapi/test-de-dominio/">
+    <span class="title">Next »</span>
+    <br>
+    <span>Tests de dominio</span>
+  </a>
+</nav>
+
+  </footer>
+</article>
+    </main>
+    
+<footer class="footer">
+        <span>&copy; 2025 <a href="http://localhost:1313/ddd-fastapi-rentals/">Blog de acarres</a></span> · 
+
+    <span>
+        Powered by
+        <a href="https://gohugo.io/" rel="noopener noreferrer" target="_blank">Hugo</a> &
+        <a href="https://github.com/adityatelange/hugo-PaperMod/" rel="noopener" target="_blank">PaperMod</a>
+    </span>
+</footer>
+<a href="#top" aria-label="go to top" title="Go to Top (Alt + G)" class="top-link" id="top-link" accesskey="g">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 12 6" fill="currentColor">
+        <path d="M12 6H0l6-6z" />
+    </svg>
+</a>
+
+<script>
+    let menu = document.getElementById('menu');
+    if (menu) {
+        
+        const scrollPosition = localStorage.getItem("menu-scroll-position");
+        if (scrollPosition) {
+            menu.scrollLeft = parseInt(scrollPosition, 10);
+        }
+        
+        menu.onscroll = function () {
+            localStorage.setItem("menu-scroll-position", menu.scrollLeft);
+        }
+    }
+
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+        anchor.addEventListener("click", function (e) {
+            e.preventDefault();
+            var id = this.getAttribute("href").substr(1);
+            if (!window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+                document.querySelector(`[id='${decodeURIComponent(id)}']`).scrollIntoView({
+                    behavior: "smooth"
+                });
+            } else {
+                document.querySelector(`[id='${decodeURIComponent(id)}']`).scrollIntoView();
+            }
+            if (id === "top") {
+                history.replaceState(null, null, " ");
+            } else {
+                history.pushState(null, null, `#${id}`);
+            }
+        });
+    });
+
+</script>
+<script>
+    var mybutton = document.getElementById("top-link");
+    window.onscroll = function () {
+        if (document.body.scrollTop > 800 || document.documentElement.scrollTop > 800) {
+            mybutton.style.visibility = "visible";
+            mybutton.style.opacity = "1";
+        } else {
+            mybutton.style.visibility = "hidden";
+            mybutton.style.opacity = "0";
+        }
+    };
+
+</script>
+<script>
+    document.getElementById("theme-toggle").addEventListener("click", () => {
+        const html = document.querySelector("html");
+        if (html.dataset.theme === "dark") {
+            html.dataset.theme = 'light';
+            localStorage.setItem("pref-theme", 'light');
+        } else {
+            html.dataset.theme = 'dark';
+            localStorage.setItem("pref-theme", 'dark');
+        }
+    })
+
+</script>
+</body>
+
+</html>

@@ -326,11 +326,3 @@ Antes de continuar deberías poder explicar:
 * cómo ejecutar tests con Makefile
 
 ---
-
-## 🔜 Próximo capítulo
-
-En el **Capítulo 05 — Application Layer (Casos de uso)** aprenderemos a:
-
-> orquestar el dominio sin romperlo.
-
-Continuamos 🚀
