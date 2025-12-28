@@ -1,5 +1,5 @@
 ---
-title: "Capítulo 1 – Setup profesional desde cero con Docker"
+title: "Capítulo 1.1 – Setup profesional desde cero con Docker"
 weight: 1
 ---
 
