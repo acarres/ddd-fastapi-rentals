@@ -1,5 +1,5 @@
 ---
-title: "Capítulo 3 – Entidades y Value Objects"
+title: "Entidades y Value Objects"
 weight: 3
 ---
 

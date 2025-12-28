@@ -1,5 +1,5 @@
 ---
-title: "Capítulo 4 – Tests de dominio"
+title: "Tests de dominio"
 weight: 4
 ---
 

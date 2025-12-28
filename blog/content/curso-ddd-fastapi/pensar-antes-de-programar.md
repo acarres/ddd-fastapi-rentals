@@ -1,5 +1,5 @@
 ---
-title: "Capítulo 1.2 – Dominio: pensar antes de programar"
+title: "Dominio: pensar antes de programar"
 weight: 2
 ---
 

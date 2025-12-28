@@ -1,9 +1,29 @@
 ---
-title: "Capítulo 1.1 – Setup profesional desde cero con Docker"
+
+title: "Setup profesional desde cero con Docker"
 weight: 1
+---------
+
+# 1.1 — Setup profesional desde cero con Docker
+
+## 🧱 Bloque 1 — Fundamentos y entorno
+
+> En este capítulo vamos a preparar **el entorno de trabajo** sobre el que construiremos todo el curso.
+> No vamos a aprender Python todavía.
+> Vamos a asegurarnos de que **el entorno no sea un problema**.
+
 ---
 
-## Qué vas a aprender
+> 🔍 **Sobre el “Check final”**
+> Al final de cada capítulo encontrarás un **Check final**.
+> No es un examen ni algo que tengas que entregar.
+> Es una lista de verificación para que compruebes si has entendido lo mínimo necesario para continuar.
+>
+> Si no puedes marcar todos los puntos, no pasa nada: vuelve a leer el capítulo con calma antes de seguir.
+
+---
+
+## 🎯 Qué vas a aprender
 
 En este capítulo vas a aprender:
 
@@ -13,11 +33,11 @@ En este capítulo vas a aprender:
 * Cómo arrancar una API real sin conocer Python
 * Cómo trabajar de forma cómoda usando `make`
 
-> Objetivo final del capítulo: tener una API funcionando en tu máquina sin ensuciar tu sistema.
+> **Objetivo final del capítulo**: tener una API funcionando en tu máquina **sin ensuciar tu sistema**.
 
 ---
 
-## Problema
+## 🧠 El problema real al empezar a programar
 
 Cuando empiezas a programar, es muy fácil encontrarte con problemas como:
 
@@ -26,11 +46,11 @@ Cuando empiezas a programar, es muy fácil encontrarte con problemas como:
 * Que algo funcione “en mi máquina” pero no en otra
 * No saber qué puedes borrar y qué no
 
-Esto genera frustración y hace que aprender sea más difícil de lo necesario.
+Esto genera frustración y hace que aprender sea **mucho más difícil de lo necesario**.
 
 ---
 
-## Idea clave
+## 💡 Idea clave
 
 > **El entorno de desarrollo no debe ser un problema.**
 
@@ -44,7 +64,7 @@ Docker nos permite crear un entorno aislado donde:
 
 ---
 
-## ¿Qué es Docker? (explicado fácil)
+## 🐳 ¿Qué es Docker? (explicado fácil)
 
 Docker es una herramienta que permite crear **contenedores**.
 
@@ -60,7 +80,7 @@ Tu ordenador **no se ensucia** y, si algo va mal, basta con borrar el contenedor
 
 ---
 
-## Estructura del proyecto
+## 🧱 Estructura del proyecto
 
 Después de este primer paso, el proyecto tiene esta estructura:
 
@@ -95,17 +115,21 @@ Esta estructura separa claramente:
 
 ---
 
-## Implementación en el proyecto
+## 🐳 Docker en el proyecto
 
-### Directorio `docker/`
+### 📁 Directorio `docker/`
 
-Aquí vive todo lo relacionado con Docker. Esto nos permite cambiar la infraestructura sin tocar el código.
+Aquí vive todo lo relacionado con Docker. Esto nos permite cambiar la infraestructura **sin tocar el código**.
 
-#### `Dockerfile`
+---
 
-Describe cómo se construye el contenedor:
+## 📄 `docker/Dockerfile`
 
-```
+El `Dockerfile` describe **cómo se construye la imagen** del contenedor.
+
+### Imagen base
+
+```dockerfile
 FROM python:3.11-slim
 ```
 
@@ -113,7 +137,9 @@ Usamos una imagen oficial y ligera de Python.
 
 ---
 
-```
+### Variables de entorno
+
+```dockerfile
 ENV PYTHONDONTWRITEBYTECODE=1 \
     PYTHONUNBUFFERED=1
 ```
@@ -122,7 +148,9 @@ Evita archivos innecesarios y mejora los logs.
 
 ---
 
-```
+### Directorio de trabajo
+
+```dockerfile
 WORKDIR /app
 ```
 
@@ -130,90 +158,143 @@ Define el directorio de trabajo dentro del contenedor.
 
 ---
 
-```
+### Dependencias del sistema
+
+```dockerfile
 RUN apt-get update \
   && apt-get install -y --no-install-recommends build-essential \
   && rm -rf /var/lib/apt/lists/*
 ```
 
-Instala dependencias básicas del sistema.
+Instala herramientas básicas del sistema.
 
 ---
 
-```
+### Dependencias de Python
+
+```dockerfile
 COPY setup/requirements.txt setup/requirements-dev.txt /app/
-```
-
-Copia las dependencias del proyecto.
-
----
-
-```
 RUN pip install --no-cache-dir -r requirements.txt -r requirements-dev.txt
 ```
 
-Instala las librerías.
-
 ---
 
-```
+### Código del proyecto
+
+```dockerfile
 COPY . /app
 ```
 
-Copia el código del proyecto.
-
 ---
 
-```
+### Puerto y comando de arranque
+
+```dockerfile
 EXPOSE 8000
-```
 
-Expone el puerto de la aplicación.
-
----
-
-```
 CMD ["uvicorn", "main:app", "--host", "0.0.0.0", "--port", "8000", "--reload"]
 ```
 
-Arranca el servidor web.
-
 ---
 
-### `docker-compose.yml`
+### ✅ Dockerfile final
 
-Define cómo se ejecuta el contenedor:
+```dockerfile
+FROM python:3.11-slim
 
-* puerto
-* volúmenes
-* variables de entorno
+ENV PYTHONDONTWRITEBYTECODE=1 \
+    PYTHONUNBUFFERED=1
 
----
+WORKDIR /app
 
-### Makefile
+RUN apt-get update \
+  && apt-get install -y --no-install-recommends build-essential \
+  && rm -rf /var/lib/apt/lists/*
 
-El `Makefile` simplifica el trabajo diario:
+COPY setup/requirements.txt setup/requirements-dev.txt /app/
+RUN pip install --no-cache-dir -r requirements.txt -r requirements-dev.txt
 
+COPY . /app
+
+EXPOSE 8000
+
+CMD ["uvicorn", "main:app", "--host", "0.0.0.0", "--port", "8000", "--reload"]
 ```
-make up    # levanta el proyecto
-make down  # lo para
-make logs  # muestra logs
+
+---
+
+## 📄 `docker/docker-compose.yml`
+
+```yaml
+services:
+  api:
+    build:
+      context: ..
+      dockerfile: docker/Dockerfile
+
+    ports:
+      - "8000:8000"
+
+    volumes:
+      - ..:/app
+
+    environment:
+      - PYTHONPATH=/app/src
 ```
 
 ---
 
-## Check final
+## 🛠️ Makefile
 
-Antes de seguir, deberías poder decir:
+### 📄 Archivo `Makefile`
 
-* [ ] Docker arranca sin errores
-* [ ] Puedo acceder a `http://localhost:8000/health`
-* [ ] Veo la documentación en `http://localhost:8000/docs`
-* [ ] Entiendo qué problema resuelve Docker
+```makefile
+COMPOSE_FILE=docker/docker-compose.yml
+
+.PHONY: up down logs restart
+
+up:
+	docker compose -f $(COMPOSE_FILE) up --build
+
+down:
+	docker compose -f $(COMPOSE_FILE) down
+
+logs:
+	docker compose -f $(COMPOSE_FILE) logs -f
+
+restart: down up
+```
 
 ---
 
-## Ejercicios
+### 🧠 ¿Qué es un Makefile?
+
+Un **Makefile** define atajos de comandos para trabajar más cómodo. No es Python ni forma parte del dominio.
+
+---
+
+### ▶️ Comandos disponibles
+
+* `make up` → levanta el proyecto
+* `make down` → para el proyecto
+* `make logs` → muestra logs
+* `make restart` → reinicia todo
+
+---
+
+## ✔️ Check final
+
+Antes de continuar con el curso, deberías poder decir:
+
+* [ ] Sé explicar con mis propias palabras qué es Docker
+* [ ] Entiendo por qué no instalamos Python en mi ordenador
+* [ ] Sé qué diferencia hay entre `Dockerfile` y `docker-compose.yml`
+* [ ] Soy capaz de arrancar y parar el proyecto usando `make`
+* [ ] Puedo acceder a la API y a la documentación en el navegador
+
+---
+
+## 🧪 Ejercicios
 
 1. Cambia el título de la API en `main.py` y recarga el navegador.
 2. Cambia el puerto `8000` por `8001` y comprueba que sigue funcionando.
@@ -221,27 +302,25 @@ Antes de seguir, deberías poder decir:
 
 ---
 
-## Errores típicos
+## ❌ Errores típicos
 
-* **Dockerfile not found** → el `docker-compose.yml` apunta a una ruta incorrecta.
-* **Port already in use** → otro proceso usa el puerto 8000.
-* **Cambios no se reflejan** → revisa el volumen en `docker-compose.yml`.
-
----
-
-## Glosario rápido
-
-* **Imagen**: plantilla a partir de la cual se crean contenedores.
-* **Contenedor**: instancia en ejecución de una imagen.
-* **Dockerfile**: receta para crear una imagen.
-* **docker-compose**: herramienta para orquestar contenedores.
+* **Dockerfile not found** → ruta incorrecta en `docker-compose.yml`
+* **Port already in use** → otro proceso usa el puerto 8000
+* **Cambios no se reflejan** → revisa el volumen
 
 ---
 
-## Próximo capítulo
+## 📘 Glosario rápido
 
-En el **Capítulo 02** dejaremos Docker a un lado y empezaremos con lo importante:
+* **Imagen**: plantilla para crear contenedores
+* **Contenedor**: instancia en ejecución de una imagen
+* **Dockerfile**: receta para crear una imagen
+* **docker-compose**: orquestador de contenedores
 
-> **pensar el dominio antes de escribir código**.
+---
 
-Continuamos en **02 — Dominio: pensar antes de programar** 🚀
+## 🔜 Próximo capítulo
+
+En el **Capítulo 2.1** empezaremos con lo importante:
+
+> **pensar el dominio antes de escribir código**

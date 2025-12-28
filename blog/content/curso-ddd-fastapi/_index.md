@@ -41,9 +41,3 @@ También aprovechar para aprender [Hugo](https://gohugo.io/)
   - 7.1 — IA como asistente de diseño
   - 7.2 — IA para explorar reglas de negocio
   - 7.3 — IA para tests y refactor
-
-## Cómo usar estos apuntes
-1. Lee el capítulo.
-2. Ejecuta el “check final”.
-3. Haz los ejercicios.
-4. Si algo falla, mira “Troubleshooting”.
