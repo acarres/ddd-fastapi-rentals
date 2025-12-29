@@ -8,22 +8,25 @@
 <title>Tests de dominio | Blog de acarres</title>
 <meta name="keywords" content="">
 <meta name="description" content="
+
 En este capítulo aprendemos a probar el dominio, no el framework ni la base de datos.
 Los tests sirven para validar reglas de negocio y darnos confianza para cambiar el código.
 
-Este capítulo está pensado para alguien que no conoce ni Python ni testing.
+Este capítulo está diseñado para alguien que no conoce ni Python ni testing.
 
 🎯 Objetivo del capítulo
+Al terminar este capítulo serás capaz de:
 
-Entender qué es un test
-Entender por qué en DDD se testea primero el dominio
+Entender qué es un test y para qué sirve
+Comprender por qué en DDD se testea primero el dominio
 Aprender pytest desde cero
-Escribir tests para Value Objects y Entidades
-Aprender a ejecutar tests de forma cómoda con Makefile
+Escribir tests claros para Value Objects y Entidades
+Introducir el patrón Object Mother para mejorar la legibilidad de los tests
 
 
 🧩 Conceptos de DDD introducidos en este capítulo
-En esta sección no hablamos de Python.">
+En esta sección no hablamos de Python.
+Solo hablamos de diseño y dominio.">
 <meta name="author" content="">
 <link rel="canonical" href="http://localhost:1313/ddd-fastapi-rentals/curso-ddd-fastapi/test-de-dominio/">
 <link crossorigin="anonymous" href="/ddd-fastapi-rentals/assets/css/stylesheet.343cc480b9ffc8f04ccbe5e968ad674880cab773ec19905e93033065c1e7a804.css" integrity="sha256-NDzEgLn/yPBMy&#43;XpaK1nSIDKt3PsGZBekwMwZcHnqAQ=" rel="preload stylesheet" as="style">
@@ -137,58 +140,65 @@ En esta sección no hablamos de Python.">
 
 </div>
   </header> 
-  <div class="post-content"><blockquote>
+  <div class="post-content"><hr>
+<blockquote>
 <p>En este capítulo aprendemos a <strong>probar el dominio</strong>, no el framework ni la base de datos.
 Los tests sirven para validar <strong>reglas de negocio</strong> y darnos <strong>confianza para cambiar el código</strong>.</p>
 </blockquote>
-<p>Este capítulo está pensado para alguien que <strong>no conoce ni Python ni testing</strong>.</p>
+<p>Este capítulo está diseñado para alguien que <strong>no conoce ni Python ni testing</strong>.</p>
 <hr>
 <h2 id="-objetivo-del-capítulo">🎯 Objetivo del capítulo<a hidden class="anchor" aria-hidden="true" href="#-objetivo-del-capítulo">#</a></h2>
+<p>Al terminar este capítulo serás capaz de:</p>
 <ul>
-<li>Entender qué es un <strong>test</strong></li>
-<li>Entender por qué en DDD se testea primero el dominio</li>
+<li>Entender qué es un <strong>test</strong> y para qué sirve</li>
+<li>Comprender por qué en DDD se testea primero el <strong>dominio</strong></li>
 <li>Aprender <code>pytest</code> desde cero</li>
-<li>Escribir tests para <strong>Value Objects</strong> y <strong>Entidades</strong></li>
-<li>Aprender a ejecutar tests de forma cómoda con <strong>Makefile</strong></li>
+<li>Escribir tests claros para <strong>Value Objects</strong> y <strong>Entidades</strong></li>
+<li>Introducir el patrón <strong>Object Mother</strong> para mejorar la legibilidad de los tests</li>
 </ul>
 <hr>
 <h2 id="-conceptos-de-ddd-introducidos-en-este-capítulo">🧩 Conceptos de DDD introducidos en este capítulo<a hidden class="anchor" aria-hidden="true" href="#-conceptos-de-ddd-introducidos-en-este-capítulo">#</a></h2>
-<p>En esta sección <strong>no hablamos de Python</strong>.</p>
+<p>En esta sección <strong>no hablamos de Python</strong>.
+Solo hablamos de <strong>diseño y dominio</strong>.</p>
+<hr>
 <h3 id="tests-de-dominio">Tests de dominio<a hidden class="anchor" aria-hidden="true" href="#tests-de-dominio">#</a></h3>
-<p>Un <strong>test de dominio</strong> verifica:</p>
+<p>Un <strong>test de dominio</strong> valida:</p>
 <ul>
 <li>reglas de negocio</li>
-<li>invariantes</li>
-<li>comportamientos permitidos y no permitidos</li>
+<li>invariantes del dominio</li>
+<li>comportamientos permitidos y prohibidos</li>
 </ul>
-<p>No prueba:</p>
+<p>No valida:</p>
 <ul>
 <li>bases de datos</li>
-<li>APIs</li>
 <li>frameworks</li>
+<li>APIs</li>
 </ul>
+<p>El dominio debe poder probarse <strong>sin infraestructura</strong>.</p>
 <hr>
-<h3 id="confianza-en-el-modelo">Confianza en el modelo<a hidden class="anchor" aria-hidden="true" href="#confianza-en-el-modelo">#</a></h3>
-<p>Un dominio bien testeado permite:</p>
-<ul>
-<li>cambiar código sin miedo</li>
-<li>detectar errores rápidamente</li>
-<li>evolucionar el sistema con seguridad</li>
-</ul>
-<p>En DDD, <strong>los tests forman parte del diseño</strong>.</p>
-<hr>
-<h3 id="comportamiento-no-implementación">Comportamiento, no implementación<a hidden class="anchor" aria-hidden="true" href="#comportamiento-no-implementación">#</a></h3>
-<p>En DDD no nos interesa <em>cómo</em> está hecho algo internamente.</p>
+<h3 id="comportamiento-antes-que-implementación">Comportamiento antes que implementación<a hidden class="anchor" aria-hidden="true" href="#comportamiento-antes-que-implementación">#</a></h3>
+<p>En DDD no nos interesa cómo está escrito el código por dentro.</p>
 <p>Nos interesa:</p>
 <ul>
-<li>qué hace</li>
+<li>qué hace el objeto</li>
 <li>cuándo falla</li>
 <li>qué reglas protege</li>
 </ul>
-<p>Por eso los tests hablan en <strong>lenguaje del dominio</strong>.</p>
+<p>Los tests describen <strong>comportamiento</strong>, no estructura.</p>
+<hr>
+<h3 id="tests-como-especificación-viva">Tests como especificación viva<a hidden class="anchor" aria-hidden="true" href="#tests-como-especificación-viva">#</a></h3>
+<p>En DDD, los tests son una <strong>especificación ejecutable</strong>:</p>
+<ul>
+<li>documentan reglas</li>
+<li>muestran ejemplos válidos e inválidos</li>
+<li>sirven como contrato del dominio</li>
+</ul>
+<p>Un desarrollador debería poder entender el dominio leyendo solo los tests.</p>
 <hr>
 <h2 id="-conceptos-de-python-introducidos-en-este-capítulo">🐍 Conceptos de Python introducidos en este capítulo<a hidden class="anchor" aria-hidden="true" href="#-conceptos-de-python-introducidos-en-este-capítulo">#</a></h2>
-<p>En esta sección <strong>no hablamos de negocio</strong>.</p>
+<p>En esta sección <strong>no hablamos de negocio</strong>.
+Solo explicamos <strong>Python y testing</strong>.</p>
+<hr>
 <h3 id="qué-es-un-test">Qué es un test<a hidden class="anchor" aria-hidden="true" href="#qué-es-un-test">#</a></h3>
 <p>Un test es una función que:</p>
 <ul>
@@ -202,179 +212,156 @@ Los tests sirven para validar <strong>reglas de negocio</strong> y darnos <stron
 <p>Ventajas:</p>
 <ul>
 <li>sintaxis simple</li>
-<li>no necesita clases</li>
+<li>no requiere clases</li>
 <li>mensajes de error claros</li>
 </ul>
 <hr>
 <h3 id="assert"><code>assert</code><a hidden class="anchor" aria-hidden="true" href="#assert">#</a></h3>
-<p><code>assert</code> comprueba que una condición sea verdadera.</p>
-<p>Si no lo es, el test falla.</p>
+<p><code>assert</code> verifica que una condición sea verdadera.</p>
+<p>Si no lo es, el test falla automáticamente.</p>
 <hr>
-<h3 id="excepciones-en-tests">Excepciones en tests<a hidden class="anchor" aria-hidden="true" href="#excepciones-en-tests">#</a></h3>
-<p>Un test también puede comprobar que <strong>se lanza un error</strong> cuando una regla se rompe.</p>
-<p>Esto es clave para validar reglas de negocio.</p>
-<hr>
-<h3 id="convención-de-nombres">Convención de nombres<a hidden class="anchor" aria-hidden="true" href="#convención-de-nombres">#</a></h3>
-<p><code>pytest</code> detecta automáticamente:</p>
-<ul>
-<li>archivos que empiezan por <code>test_</code></li>
-<li>funciones que empiezan por <code>test_</code></li>
-</ul>
+<h3 id="probar-excepciones">Probar excepciones<a hidden class="anchor" aria-hidden="true" href="#probar-excepciones">#</a></h3>
+<p>Un test también puede verificar que una <strong>regla se rompe</strong> lanzando una excepción.</p>
+<p>Esto es clave en DDD: muchas reglas se expresan como errores de dominio.</p>
 <hr>
 <h2 id="-aplicación-al-dominio-ddd--python-juntos">🧱 Aplicación al dominio (DDD + Python juntos)<a hidden class="anchor" aria-hidden="true" href="#-aplicación-al-dominio-ddd--python-juntos">#</a></h2>
+<hr>
 <h3 id="estructura-de-tests">Estructura de tests<a hidden class="anchor" aria-hidden="true" href="#estructura-de-tests">#</a></h3>
 <pre tabindex="0"><code>tests/
   shared/
     domain/
       value_objects/
         test_date_range.py
+        date_range_mother.py
 
   rentals/
     booking/
       domain/
         test_booking.py
+        booking_mother.py
 </code></pre><p>La estructura de tests <strong>refleja la estructura del dominio</strong>.</p>
 <hr>
 <h2 id="-tests-del-value-object-daterange">🧪 Tests del Value Object <code>DateRange</code><a hidden class="anchor" aria-hidden="true" href="#-tests-del-value-object-daterange">#</a></h2>
-<p>Archivo:</p>
-<pre tabindex="0"><code>tests/shared/domain/value_objects/test_date_range.py
-</code></pre><div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#f92672">from</span> datetime <span style="color:#f92672">import</span> date
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span><span style="color:#f92672">from</span> shared.domain.value_objects.date_range <span style="color:#f92672">import</span> DateRange
-</span></span><span style="display:flex;"><span><span style="color:#f92672">from</span> shared.domain.errors.invalid_date_range <span style="color:#f92672">import</span> InvalidDateRange
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span><span style="color:#66d9ef">def</span> <span style="color:#a6e22e">test_date_range_is_created_when_dates_are_valid</span>():
-</span></span><span style="display:flex;"><span>    date_range <span style="color:#f92672">=</span> DateRange(
-</span></span><span style="display:flex;"><span>        start_date<span style="color:#f92672">=</span>date(<span style="color:#ae81ff">2025</span>, <span style="color:#ae81ff">1</span>, <span style="color:#ae81ff">1</span>),
-</span></span><span style="display:flex;"><span>        end_date<span style="color:#f92672">=</span>date(<span style="color:#ae81ff">2025</span>, <span style="color:#ae81ff">1</span>, <span style="color:#ae81ff">31</span>),
-</span></span><span style="display:flex;"><span>    )
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">assert</span> date_range<span style="color:#f92672">.</span>start_date <span style="color:#f92672">==</span> date(<span style="color:#ae81ff">2025</span>, <span style="color:#ae81ff">1</span>, <span style="color:#ae81ff">1</span>)
-</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">assert</span> date_range<span style="color:#f92672">.</span>end_date <span style="color:#f92672">==</span> date(<span style="color:#ae81ff">2025</span>, <span style="color:#ae81ff">1</span>, <span style="color:#ae81ff">31</span>)
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span><span style="color:#66d9ef">def</span> <span style="color:#a6e22e">test_date_range_raises_error_when_end_is_before_start</span>():
-</span></span><span style="display:flex;"><span>    <span style="color:#f92672">from</span> pytest <span style="color:#f92672">import</span> raises
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">with</span> raises(InvalidDateRange):
-</span></span><span style="display:flex;"><span>        DateRange(
-</span></span><span style="display:flex;"><span>            start_date<span style="color:#f92672">=</span>date(<span style="color:#ae81ff">2025</span>, <span style="color:#ae81ff">1</span>, <span style="color:#ae81ff">31</span>),
-</span></span><span style="display:flex;"><span>            end_date<span style="color:#f92672">=</span>date(<span style="color:#ae81ff">2025</span>, <span style="color:#ae81ff">1</span>, <span style="color:#ae81ff">1</span>),
-</span></span><span style="display:flex;"><span>        )
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span><span style="color:#66d9ef">def</span> <span style="color:#a6e22e">test_date_range_contains_date_inside_range</span>():
-</span></span><span style="display:flex;"><span>    date_range <span style="color:#f92672">=</span> DateRange(
-</span></span><span style="display:flex;"><span>        start_date<span style="color:#f92672">=</span>date(<span style="color:#ae81ff">2025</span>, <span style="color:#ae81ff">1</span>, <span style="color:#ae81ff">1</span>),
-</span></span><span style="display:flex;"><span>        end_date<span style="color:#f92672">=</span>date(<span style="color:#ae81ff">2025</span>, <span style="color:#ae81ff">1</span>, <span style="color:#ae81ff">31</span>),
-</span></span><span style="display:flex;"><span>    )
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">assert</span> date_range<span style="color:#f92672">.</span>contains(date(<span style="color:#ae81ff">2025</span>, <span style="color:#ae81ff">1</span>, <span style="color:#ae81ff">15</span>)) <span style="color:#f92672">is</span> <span style="color:#66d9ef">True</span>
-</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">assert</span> date_range<span style="color:#f92672">.</span>contains(date(<span style="color:#ae81ff">2025</span>, <span style="color:#ae81ff">2</span>, <span style="color:#ae81ff">1</span>)) <span style="color:#f92672">is</span> <span style="color:#66d9ef">False</span>
-</span></span></code></pre></div><hr>
-<h2 id="-tests-de-la-entidad-booking">🧪 Tests de la Entidad <code>Booking</code><a hidden class="anchor" aria-hidden="true" href="#-tests-de-la-entidad-booking">#</a></h2>
-<p>Archivo:</p>
-<pre tabindex="0"><code>tests/rentals/booking/domain/test_booking.py
-</code></pre><div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#f92672">import</span> pytest
-</span></span><span style="display:flex;"><span><span style="color:#f92672">from</span> datetime <span style="color:#f92672">import</span> date
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span><span style="color:#f92672">from</span> rentals.booking.domain.booking <span style="color:#f92672">import</span> Booking
-</span></span><span style="display:flex;"><span><span style="color:#f92672">from</span> rentals.booking.domain.booking_status <span style="color:#f92672">import</span> BookingStatus
-</span></span><span style="display:flex;"><span><span style="color:#f92672">from</span> rentals.booking.domain.errors.booking_not_active <span style="color:#f92672">import</span> BookingNotActive
-</span></span><span style="display:flex;"><span><span style="color:#f92672">from</span> shared.domain.value_objects.date_range <span style="color:#f92672">import</span> DateRange
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span><span style="color:#66d9ef">def</span> <span style="color:#a6e22e">test_booking_is_created_as_active</span>():
-</span></span><span style="display:flex;"><span>    date_range <span style="color:#f92672">=</span> DateRange(
-</span></span><span style="display:flex;"><span>        start_date<span style="color:#f92672">=</span>date(<span style="color:#ae81ff">2025</span>, <span style="color:#ae81ff">1</span>, <span style="color:#ae81ff">1</span>),
-</span></span><span style="display:flex;"><span>        end_date<span style="color:#f92672">=</span>date(<span style="color:#ae81ff">2025</span>, <span style="color:#ae81ff">1</span>, <span style="color:#ae81ff">31</span>),
-</span></span><span style="display:flex;"><span>    )
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>    booking <span style="color:#f92672">=</span> Booking<span style="color:#f92672">.</span>create(date_range)
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">assert</span> booking<span style="color:#f92672">.</span>status <span style="color:#f92672">is</span> BookingStatus<span style="color:#f92672">.</span>ACTIVE
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span><span style="color:#66d9ef">def</span> <span style="color:#a6e22e">test_booking_status_is_not_a_free_string</span>():
-</span></span><span style="display:flex;"><span>    date_range <span style="color:#f92672">=</span> DateRange(
-</span></span><span style="display:flex;"><span>        start_date<span style="color:#f92672">=</span>date(<span style="color:#ae81ff">2025</span>, <span style="color:#ae81ff">1</span>, <span style="color:#ae81ff">1</span>),
-</span></span><span style="display:flex;"><span>        end_date<span style="color:#f92672">=</span>date(<span style="color:#ae81ff">2025</span>, <span style="color:#ae81ff">1</span>, <span style="color:#ae81ff">31</span>),
-</span></span><span style="display:flex;"><span>    )
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>    booking <span style="color:#f92672">=</span> Booking<span style="color:#f92672">.</span>create(date_range)
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">assert</span> isinstance(booking<span style="color:#f92672">.</span>status, BookingStatus)
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span><span style="color:#66d9ef">def</span> <span style="color:#a6e22e">test_booking_can_be_cancelled_when_active</span>():
-</span></span><span style="display:flex;"><span>    date_range <span style="color:#f92672">=</span> DateRange(
-</span></span><span style="display:flex;"><span>        start_date<span style="color:#f92672">=</span>date(<span style="color:#ae81ff">2025</span>, <span style="color:#ae81ff">1</span>, <span style="color:#ae81ff">1</span>),
-</span></span><span style="display:flex;"><span>        end_date<span style="color:#f92672">=</span>date(<span style="color:#ae81ff">2025</span>, <span style="color:#ae81ff">1</span>, <span style="color:#ae81ff">31</span>),
-</span></span><span style="display:flex;"><span>    )
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>    booking <span style="color:#f92672">=</span> Booking<span style="color:#f92672">.</span>create(date_range)
-</span></span><span style="display:flex;"><span>    booking<span style="color:#f92672">.</span>cancel()
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">assert</span> booking<span style="color:#f92672">.</span>status <span style="color:#f92672">is</span> BookingStatus<span style="color:#f92672">.</span>CANCELLED
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span><span style="color:#66d9ef">def</span> <span style="color:#a6e22e">test_booking_cannot_be_cancelled_when_not_active</span>():
-</span></span><span style="display:flex;"><span>    date_range <span style="color:#f92672">=</span> DateRange(
-</span></span><span style="display:flex;"><span>        start_date<span style="color:#f92672">=</span>date(<span style="color:#ae81ff">2025</span>, <span style="color:#ae81ff">1</span>, <span style="color:#ae81ff">1</span>),
-</span></span><span style="display:flex;"><span>        end_date<span style="color:#f92672">=</span>date(<span style="color:#ae81ff">2025</span>, <span style="color:#ae81ff">1</span>, <span style="color:#ae81ff">31</span>),
-</span></span><span style="display:flex;"><span>    )
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>    booking <span style="color:#f92672">=</span> Booking<span style="color:#f92672">.</span>create(date_range)
-</span></span><span style="display:flex;"><span>    booking<span style="color:#f92672">.</span>cancel()
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">with</span> pytest<span style="color:#f92672">.</span>raises(BookingNotActive):
-</span></span><span style="display:flex;"><span>        booking<span style="color:#f92672">.</span>cancel()
-</span></span></code></pre></div><hr>
-<h2 id="-automatización-con-makefile">🛠️ Automatización con Makefile<a hidden class="anchor" aria-hidden="true" href="#-automatización-con-makefile">#</a></h2>
-<p>Los tests se ejecutan <strong>dentro del contenedor Docker</strong>.
-Para no tener que recordar comandos largos, usamos un <strong>Makefile</strong>.</p>
-<p>Un Makefile define <strong>atajos</strong> para ejecutar tareas repetitivas.</p>
-<h3 id="variables-usadas">Variables usadas<a hidden class="anchor" aria-hidden="true" href="#variables-usadas">#</a></h3>
+<p>Antes de usar Object Mother, un test típico sería largo y repetitivo.</p>
+<p>Con Object Mother, los tests se centran solo en el comportamiento.</p>
+<hr>
+<h3 id="object-mother">Object Mother<a hidden class="anchor" aria-hidden="true" href="#object-mother">#</a></h3>
+<p><strong>Object Mother</strong> es un patrón de testing que se usa para:</p>
 <ul>
-<li><code>COMPOSE_FILE</code> → ruta al archivo <code>docker-compose.yml</code></li>
-<li><code>SERVICE</code> → nombre del servicio Docker donde corre Python (<code>api</code>)</li>
+<li>crear objetos válidos del dominio</li>
+<li>reducir ruido en los tests</li>
+<li>evitar repetir siempre el mismo setup</li>
+</ul>
+<p>Importante:</p>
+<ul>
+<li>NO es dominio</li>
+<li>NO vive en <code>src/</code></li>
+<li>SOLO se usa en tests</li>
 </ul>
 <hr>
-<h3 id="ejecutar-todos-los-tests">Ejecutar todos los tests<a hidden class="anchor" aria-hidden="true" href="#ejecutar-todos-los-tests">#</a></h3>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>make test
-</span></span></code></pre></div><p>Ejecuta todos los tests del proyecto.</p>
+<h3 id="daterangemother">DateRangeMother<a hidden class="anchor" aria-hidden="true" href="#daterangemother">#</a></h3>
+<pre tabindex="0"><code>from datetime import date
+
+from shared.domain.value_objects.date_range import DateRange
+
+
+class DateRangeMother:
+    @staticmethod
+    def january_2025() -&gt; DateRange:
+        return DateRange(
+            start_date=date(2025, 1, 1),
+            end_date=date(2025, 1, 31),
+        )
+
+    @staticmethod
+    def invalid() -&gt; DateRange:
+        return DateRange(
+            start_date=date(2025, 1, 31),
+            end_date=date(2025, 1, 1),
+        )
+</code></pre><hr>
+<h3 id="test-usando-object-mother">Test usando Object Mother<a hidden class="anchor" aria-hidden="true" href="#test-usando-object-mother">#</a></h3>
+<pre tabindex="0"><code>from pytest import raises
+
+from shared.domain.errors.invalid_date_range import InvalidDateRange
+from .date_range_mother import DateRangeMother
+
+
+def test_valid_date_range_is_created():
+    date_range = DateRangeMother.january_2025()
+
+    assert date_range.contains(date_range.start_date)
+
+
+def test_invalid_date_range_raises_error():
+    with raises(InvalidDateRange):
+        DateRangeMother.invalid()
+</code></pre><hr>
+<h2 id="-tests-de-la-entidad-booking">🧪 Tests de la Entidad <code>Booking</code><a hidden class="anchor" aria-hidden="true" href="#-tests-de-la-entidad-booking">#</a></h2>
 <hr>
-<h3 id="ejecutar-un-solo-fichero">Ejecutar un solo fichero<a hidden class="anchor" aria-hidden="true" href="#ejecutar-un-solo-fichero">#</a></h3>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>make test-file f<span style="color:#f92672">=</span>tests/shared/domain/value_objects/test_date_range.py
-</span></span></code></pre></div><p>Ejecuta únicamente ese archivo de tests.</p>
-<hr>
-<h3 id="ejecutar-tests-por-nombre">Ejecutar tests por nombre<a hidden class="anchor" aria-hidden="true" href="#ejecutar-tests-por-nombre">#</a></h3>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>make test-k k<span style="color:#f92672">=</span>date_range
-</span></span></code></pre></div><p>Ejecuta solo los tests cuyo nombre contiene ese texto.</p>
-<hr>
-<h3 id="ejecutar-un-test-concreto">Ejecutar un test concreto<a hidden class="anchor" aria-hidden="true" href="#ejecutar-un-test-concreto">#</a></h3>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>make test-node n<span style="color:#f92672">=</span>tests/shared/domain/value_objects/test_date_range.py::test_date_range_is_created_when_dates_are_valid
-</span></span></code></pre></div><p>Ejecuta un único test exacto.</p>
-<hr>
+<h3 id="bookingmother">BookingMother<a hidden class="anchor" aria-hidden="true" href="#bookingmother">#</a></h3>
+<pre tabindex="0"><code>from rentals.booking.domain.booking import Booking
+from shared.domain.value_objects.date_range import DateRange
+from shared.domain.value_objects.date_range_mother import DateRangeMother
+
+
+class BookingMother:
+    @staticmethod
+    def active() -&gt; Booking:
+        return Booking.create(DateRangeMother.january_2025())
+</code></pre><hr>
+<h3 id="tests-de-booking-usando-object-mother">Tests de Booking usando Object Mother<a hidden class="anchor" aria-hidden="true" href="#tests-de-booking-usando-object-mother">#</a></h3>
+<pre tabindex="0"><code>import pytest
+
+from rentals.booking.domain.booking_status import BookingStatus
+from rentals.booking.domain.errors.booking_not_active import BookingNotActive
+from .booking_mother import BookingMother
+
+
+def test_booking_is_created_as_active():
+    booking = BookingMother.active()
+
+    assert booking.status is BookingStatus.ACTIVE
+
+
+def test_booking_can_be_cancelled_when_active():
+    booking = BookingMother.active()
+
+    booking.cancel()
+
+    assert booking.status is BookingStatus.CANCELLED
+
+
+def test_booking_cannot_be_cancelled_twice():
+    booking = BookingMother.active()
+    booking.cancel()
+
+    with pytest.raises(BookingNotActive):
+        booking.cancel()
+</code></pre><hr>
+<h2 id="-ejecución-de-tests">🛠️ Ejecución de tests<a hidden class="anchor" aria-hidden="true" href="#-ejecución-de-tests">#</a></h2>
+<p>Los tests se ejecutan dentro del contenedor Docker usando el <code>Makefile</code>.</p>
+<p>Comandos habituales:</p>
+<pre tabindex="0"><code>make test
+make test-file f=tests/rentals/booking/domain/test_booking.py
+</code></pre><hr>
 <h2 id="-qué-hemos-aprendido">🧠 Qué hemos aprendido<a hidden class="anchor" aria-hidden="true" href="#-qué-hemos-aprendido">#</a></h2>
 <ul>
-<li>Los tests protegen reglas de negocio</li>
+<li>El dominio se prueba sin infraestructura</li>
 <li>Los tests describen comportamiento</li>
-<li>El dominio se puede testear sin infraestructura</li>
-<li>Un Makefile simplifica el trabajo diario</li>
+<li>Object Mother reduce ruido en los tests</li>
+<li>Los tests actúan como especificación viva</li>
 </ul>
 <hr>
 <h2 id="-check-final">✅ Check final<a hidden class="anchor" aria-hidden="true" href="#-check-final">#</a></h2>
 <p>Antes de continuar deberías poder explicar:</p>
 <ul>
 <li>qué es un test</li>
-<li>qué es <code>pytest</code></li>
-<li>qué hace <code>assert</code></li>
-<li>cómo se prueba una excepción</li>
-<li>cómo ejecutar tests con Makefile</li>
+<li>qué valida un test de dominio</li>
+<li>qué es Object Mother</li>
+<li>por qué Object Mother no pertenece al dominio</li>
+<li>cómo ejecutar tests del dominio</li>
 </ul>
-<hr>
 
 
   </div>
