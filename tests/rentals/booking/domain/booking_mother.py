@@ -6,4 +6,4 @@ from uuid import uuid4
 class BookingMother:
     @staticmethod
     def active() -> Booking:
-        return Booking.create(id=uuid4(), date_range=DateRangeMother.january_2025())
+        return Booking.create(date_range=DateRangeMother.january_2025())
