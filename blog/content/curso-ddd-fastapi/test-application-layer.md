@@ -1,13 +1,17 @@
 ---
 
-title: "Tests de dominio"
-weight: 4
+title: "Tests de Application Layer"
+weight: 7
 ---------
 
-> En este capítulo aprendemos a **probar el dominio**, no el framework ni la base de datos.
-> Los tests sirven para validar **reglas de negocio** y darnos **confianza para cambiar el código**.
+> En este capítulo aprendemos a **testear casos de uso**.
+> No testeamos el dominio ni la infraestructura: testeamos la **orquestación**.
 
-Este capítulo está diseñado para alguien que **no conoce ni Python ni testing**.
+Este capítulo está diseñado para alguien que:
+
+* no conoce Python
+* no conoce testing
+* pero ya entiende qué es un caso de uso, una Entidad y un Value Object
 
 ---
 
@@ -15,281 +19,229 @@ Este capítulo está diseñado para alguien que **no conoce ni Python ni testing
 
 Al terminar este capítulo serás capaz de:
 
-* Entender qué es un **test** y para qué sirve
-* Comprender por qué en DDD se testea primero el **dominio**
-* Aprender `pytest` desde cero
-* Escribir tests claros para **Value Objects** y **Entidades**
-* Introducir el patrón **Object Mother** para mejorar la legibilidad de los tests
+* Saber **qué tipo de test** estás escribiendo
+* Entender **qué se testea** y **qué no** en Application Layer
+* Escribir tests sencillos para casos de uso
+* Ver cómo el Application Layer usa el dominio sin duplicar lógica
+* Preparar el terreno para introducir doubles en el siguiente bloque
 
 ---
 
 ## 🧩 Conceptos de DDD introducidos en este capítulo
 
 En esta sección **no hablamos de Python**.
-Solo hablamos de **diseño y dominio**.
+Hablamos de **arquitectura y responsabilidades**.
 
 ---
 
-### Tests de dominio
+### Qué tipo de test es este
 
-Un **test de dominio** valida:
+Los tests de este capítulo son:
 
-* reglas de negocio
+✅ **Tests de Application Layer**
+
+No son:
+
+❌ tests de dominio (eso ya lo hicimos)
+❌ tests de integración
+❌ tests de API
+
+---
+
+### Qué prueba un test de Application Layer
+
+Un test de Application Layer verifica que:
+
+* un **caso de uso** se ejecuta correctamente
+* el **contrato de entrada** es respetado
+* el dominio es **orquestado**, no reimplementado
+
+No verifica:
+
+* reglas internas del dominio
+* persistencia
+* transporte (HTTP, JSON, etc.)
+
+---
+
+### Qué NO se testea aquí
+
+En estos tests **no probamos**:
+
 * invariantes del dominio
-* comportamientos permitidos y prohibidos
+* base de datos real
+* framework web
 
-No valida:
-
-* bases de datos
-* frameworks
-* APIs
-
-El dominio debe poder probarse **sin infraestructura**.
-
----
-
-### Comportamiento antes que implementación
-
-En DDD no nos interesa cómo está escrito el código por dentro.
-
-Nos interesa:
-
-* qué hace el objeto
-* cuándo falla
-* qué reglas protege
-
-Los tests describen **comportamiento**, no estructura.
-
----
-
-### Tests como especificación viva
-
-En DDD, los tests son una **especificación ejecutable**:
-
-* documentan reglas
-* muestran ejemplos válidos e inválidos
-* sirven como contrato del dominio
-
-Un desarrollador debería poder entender el dominio leyendo solo los tests.
+Cada una de esas cosas se testea en su capa correspondiente.
 
 ---
 
 ## 🐍 Conceptos de Python introducidos en este capítulo
 
 En esta sección **no hablamos de negocio**.
-Solo explicamos **Python y testing**.
+Solo explicamos **testing en Python**.
 
 ---
 
-### Qué es un test
-
-Un test es una función que:
-
-* ejecuta código
-* comprueba un resultado
-* falla si el resultado no es el esperado
-
----
-
-### `pytest`
+### Qué es `pytest`
 
 `pytest` es una librería de Python para escribir tests.
 
-Ventajas:
+Características principales:
 
-* sintaxis simple
-* no requiere clases
-* mensajes de error claros
+* los tests son funciones simples
+* no hace falta usar clases
+* los mensajes de error son claros
 
 ---
 
 ### `assert`
 
-`assert` verifica que una condición sea verdadera.
+`assert` comprueba que una condición sea verdadera.
 
-Si no lo es, el test falla automáticamente.
-
----
-
-### Probar excepciones
-
-Un test también puede verificar que una **regla se rompe** lanzando una excepción.
-
-Esto es clave en DDD: muchas reglas se expresan como errores de dominio.
+Si no lo es, el test falla.
 
 ---
 
-## 🧱 Aplicación al dominio (DDD + Python juntos)
+### Excepciones en tests
+
+Un test también puede comprobar que **se lanza una excepción**.
+
+Esto es fundamental para validar flujos erróneos.
 
 ---
 
-### Estructura de tests
+## 🧱 Aplicación al proyecto (DDD + Python juntos)
 
-```
-tests/
-  shared/
-    domain/
-      value_objects/
-        test_date_range.py
-        date_range_mother.py
+---
 
-  rentals/
-    booking/
-      domain/
-        test_booking.py
-        booking_mother.py
+### Caso de uso a testear
+
+En el capítulo anterior definimos este caso de uso:
+
+```python
+class CreateBooking:
+    def execute(self, request: CreateBookingRequest) -> UUID:
+        ...
 ```
 
-La estructura de tests **refleja la estructura del dominio**.
+Este es el objeto que vamos a testear.
 
 ---
 
-## 🧪 Tests del Value Object `DateRange`
+### DTO de entrada (recordatorio)
 
-Antes de usar Object Mother, un test típico sería largo y repetitivo.
+El caso de uso recibe un **DTO de entrada** que define su contrato:
 
-Con Object Mother, los tests se centran solo en el comportamiento.
-
----
-
-### Object Mother
-
-**Object Mother** es un patrón de testing que se usa para:
-
-* crear objetos válidos del dominio
-* reducir ruido en los tests
-* evitar repetir siempre el mismo setup
-
-Importante:
-
-* NO es dominio
-* NO vive en `src/`
-* SOLO se usa en tests
-
----
-
-### DateRangeMother
-
-```
+```python
+from dataclasses import dataclass
 from datetime import date
-from shared.domain.value_objects.date_range import DateRange
 
-
-class DateRangeMother:
-    @staticmethod
-    def january_2025() -> DateRange:
-        return DateRange(start=date(2025, 1, 1), end=date(2025, 1, 31))
-
-    @staticmethod
-    def invalid() -> DateRange:
-        return DateRange(start=date(2025, 1, 31), end=date(2025, 1, 1))
+@dataclass(frozen=True)
+class CreateBookingRequest:
+    start_date: date
+    end_date: date
 ```
 
 ---
 
-### Test usando Object Mother
+## 🧪 Test del caso de uso: CreateBooking
+
+Archivo:
 
 ```
+tests/rentals/booking/application/test_create_booking.py
+```
+
+```python
+from datetime import date
+from uuid import UUID
+
+from rentals.booking.application.create_booking import CreateBooking
+from rentals.booking.application.create_booking_request import CreateBookingRequest
+
+
+def test_create_booking_returns_an_id():
+    use_case = CreateBooking()
+
+    booking_id = use_case.execute(
+        CreateBookingRequest(
+            start_date=date(2025, 1, 1),
+            end_date=date(2025, 1, 31),
+        )
+    )
+
+    assert isinstance(booking_id, UUID)
+```
+
+---
+
+### Qué está comprobando este test
+
+Este test verifica que:
+
+* el caso de uso acepta un DTO como entrada
+* el dominio se ejecuta correctamente
+* el resultado cumple el contrato (un identificador)
+
+No verifica:
+
+* cómo se crea internamente la entidad
+* cómo se validan las reglas de negocio
+
+Eso ya está cubierto por los tests de dominio.
+
+---
+
+## 🧪 Test de propagación de error de dominio
+
+Este test comprueba que el Application Layer **no captura ni altera** errores del dominio.
+
+```python
 import pytest
 from datetime import date
-from shared.domain.value_objects.date_range import DateRange
-from shared.domain.errors.invalid_date_range import InvalidDateRange
-from tests.shared.domain.value_objects.date_range_mother import DateRangeMother
+from uuid import UUID
+
+from rentals.booking.application.create_booking import CreateBooking
+from rentals.booking.application.create_booking_request import CreateBookingRequest
 
 
-def test_valid_date_range_is_created():
-    date_range = DateRangeMother.january_2025()
-
-    assert date_range.contains(date_range.start)
-
-
-def test_invalid_date_range_raises_error():
-    with pytest.raises(InvalidDateRange):
-        DateRangeMother.invalid()
+def test_create_booking_returns_an_id():
+    use_case = CreateBooking()
+    booking_id = use_case.execute(CreateBookingRequest(start_date=date(2025, 1, 1), end_date=date(2025, 1, 31)))
+    assert isinstance(booking_id, UUID)
 ```
 
+> “No testeamos aquí los errores de dominio porque ya están cubiertos en tests de dominio.
+> Volveremos a tests de error cuando el caso de uso tenga lógica propia (repositorio/UoW/mapping).”
 ---
 
-## 🧪 Tests de la Entidad `Booking`
+## 🧠 Nota importante sobre test doubles
 
----
+En este capítulo **NO usamos todavía**:
 
-### BookingMother
+* stubs
+* fakes
+* mocks
 
-```
-from rentals.booking.domain.booking import Booking
-from tests.shared.domain.value_objects.date_range_mother import DateRangeMother
-from uuid import uuid4
+¿Por qué?
 
+Porque el caso de uso **todavía no tiene dependencias externas**.
 
-class BookingMother:
-    @staticmethod
-    def active() -> Booking:
-        return Booking.create(id=uuid4(), date_range=DateRangeMother.january_2025())
-```
+Los doubles aparecerán en el **Bloque 4**, cuando introduzcamos:
 
----
-
-### Tests de Booking usando Object Mother
-
-```
-import pytest
-from datetime import date
-from uuid import uuid4
-from rentals.booking.domain.booking import Booking
-from rentals.booking.domain.booking_status import BookingStatus
-from rentals.booking.domain.errors.booking_not_active import BookingNotActive
-from shared.domain.value_objects.date_range import DateRange
-from tests.rentals.booking.domain.booking_mother import BookingMother
-
-
-def test_booking_is_created_when_dates_are_valid():
-        booking = BookingMother.active()
-
-        assert booking.id is not None
-        assert booking.date_range is not None
-        assert booking.status.equals(BookingStatus.ACTIVE)
-
-def test_booking_status_is_not_a_free_string():
-        booking = BookingMother.active()
-        assert isinstance(booking.status, BookingStatus)
-
-def test_booking_can_be_cancelled_when_active():
-    booking = BookingMother.active()
-    booking.cancel()
-
-    assert booking.status.equals(BookingStatus.CANCELLED)
-
-
-def test_booking_cannot_be_cancelled_when_not_active():
-    booking = BookingMother.active()
-    booking.cancel()
-
-    with pytest.raises(BookingNotActive):
-        booking.cancel()
-```
-
----
-
-## 🛠️ Ejecución de tests
-
-Los tests se ejecutan dentro del contenedor Docker usando el `Makefile`.
-
-Comandos habituales:
-
-```
-make test
-make test-file f=tests/rentals/booking/domain/test_booking.py
-```
+* repositorios
+* persistencia
+* transacciones
 
 ---
 
 ## 🧠 Qué hemos aprendido
 
-* El dominio se prueba sin infraestructura
-* Los tests describen comportamiento
-* Object Mother reduce ruido en los tests
-* Los tests actúan como especificación viva
+* Los tests de Application Layer prueban **casos de uso**, no reglas
+* El DTO define el contrato de entrada
+* El Application Layer no duplica lógica del dominio
+* No siempre hacen falta doubles
 
 ---
 
@@ -297,8 +249,7 @@ make test-file f=tests/rentals/booking/domain/test_booking.py
 
 Antes de continuar deberías poder explicar:
 
-* qué es un test
-* qué valida un test de dominio
-* qué es Object Mother
-* por qué Object Mother no pertenece al dominio
-* cómo ejecutar tests del dominio
+* qué es un test de Application Layer
+* qué se está probando en estos tests
+* por qué no se usan mocks todavía
+* cómo se testea la propagación de errores
