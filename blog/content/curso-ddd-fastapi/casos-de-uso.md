@@ -20,6 +20,7 @@ Este capítulo está diseñado para alguien que **no conoce ni DDD ni Python**, 
 Al terminar este capítulo serás capaz de:
 
 * Entender qué es un **caso de uso**
+* Entender cuando usar DTO y cuando no
 * Saber por qué el Application Layer existe
 * Diferenciar **intención** de **ejecución**
 * Implementar un primer caso de uso en Python
@@ -104,7 +105,7 @@ Es una clase que representa **una acción concreta**.
 
 El método público del caso de uso:
 
-* recibe datos de entrada
+* recibe datos de entrada encapsulados en un DTO
 * ejecuta la intención
 * devuelve un resultado simple (si aplica)
 
@@ -121,12 +122,35 @@ src/
   rentals/
     booking/
       application/
+        /request
+          create_booking_request.py
         create_booking.py
 ```
 
 Cada fichero representa **un caso de uso**.
 
+Como parámetro de entrada, vamos a tener un **DTO** que encapsula los parámetros necesarios
+
+Como parametros de salida, la regla es:
+
+- Si cruzas un boundary (API ↔ Application) y devuelves más de un valor o quieres un contrato estable
+  - ✅ Output DTO
+- Si el caso de uso devuelve un único valor simple (p. ej. UUID) y te vale como contrato
+  - ✅ puedes devolver el valor directamente sin DTO.
+  
 ---
+### Cómo queda la comunicación “correcta”
+✅ **API → Application**
+    - API recibe CreateBookingRequest (DTO)
+    - Lo convierte a tipos del dominio o a un input del caso de uso
+
+✅ **Application → API**
+    - Application devuelve CreateBookingResult (DTO de salida) o algo simple (booking_id)
+    - API decide cómo responder (201 + Location + body)
+
+
+---
+
 
 ## 🧭 Caso de uso: Crear una reserva
 
@@ -144,19 +168,30 @@ Solo expresamos la intención.
 
 ---
 
+### Implementación del DTO (Request)
+```
+from datetime import date
+
+
+class CreateBookingRequest:
+    def __init__(self, start_date: date, end_date: date):
+        self.start_date = start_date
+        self.end_date = end_date
+```
 ### Implementación del caso de uso
 
 ```
-from uuid import uuid4
+from datetime import date
+from uuid import UUID
 
-from shared.domain.value_objects.date_range import DateRange
 from rentals.booking.domain.booking import Booking
+from shared.domain.value_objects.date_range import DateRange
+from rentals.booking.application.request.create_booking_request import CreateBookingRequest
 
 
 class CreateBooking:
-    def execute(self, start_date, end_date):
-        date_range = DateRange(start_date, end_date)
-
+    def execute(self, request: CreateBookingRequest) -> UUID:
+        date_range = DateRange(request.start_date, request.end_date)
         booking = Booking.create(date_range)
 
         return booking.id

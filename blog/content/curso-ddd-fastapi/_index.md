@@ -20,7 +20,7 @@ También aprovechar para aprender [Hugo](https://gohugo.io/)
   - [2.3 — Test de dominio](test-de-dominio)
 - 🧭 BLOQUE 3 — Application Layer
   - [3.1 — Application Layer: qué es y qué no es](que-es-application-layer)
-  - 3.2 — Casos de uso
+  - [3.2 — Casos de uso](casos-de-uso)
   - 3.3 — Tests de Application Layer
 - 🗄️ BLOQUE 4 — Persistencia y Consistencia
   - 4.1 — Repositorios (interfaces de dominio)

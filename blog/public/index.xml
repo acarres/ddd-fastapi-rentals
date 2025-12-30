@@ -75,6 +75,32 @@ Solo hablamos de &lt;strong&gt;modelado del dominio&lt;/strong&gt;.&lt;/p&gt;</d
     </item>
     <item>
       <title>Tests de dominio</title>
+      <link>http://localhost:1313/ddd-fastapi-rentals/curso-ddd-fastapi/test-application-layer/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      <guid>http://localhost:1313/ddd-fastapi-rentals/curso-ddd-fastapi/test-application-layer/</guid>
+      <description>&lt;hr&gt;
+&lt;blockquote&gt;
+&lt;p&gt;En este capítulo aprendemos a &lt;strong&gt;probar el dominio&lt;/strong&gt;, no el framework ni la base de datos.
+Los tests sirven para validar &lt;strong&gt;reglas de negocio&lt;/strong&gt; y darnos &lt;strong&gt;confianza para cambiar el código&lt;/strong&gt;.&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;Este capítulo está diseñado para alguien que &lt;strong&gt;no conoce ni Python ni testing&lt;/strong&gt;.&lt;/p&gt;
+&lt;hr&gt;
+&lt;h2 id=&#34;-objetivo-del-capítulo&#34;&gt;🎯 Objetivo del capítulo&lt;/h2&gt;
+&lt;p&gt;Al terminar este capítulo serás capaz de:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;Entender qué es un &lt;strong&gt;test&lt;/strong&gt; y para qué sirve&lt;/li&gt;
+&lt;li&gt;Comprender por qué en DDD se testea primero el &lt;strong&gt;dominio&lt;/strong&gt;&lt;/li&gt;
+&lt;li&gt;Aprender &lt;code&gt;pytest&lt;/code&gt; desde cero&lt;/li&gt;
+&lt;li&gt;Escribir tests claros para &lt;strong&gt;Value Objects&lt;/strong&gt; y &lt;strong&gt;Entidades&lt;/strong&gt;&lt;/li&gt;
+&lt;li&gt;Introducir el patrón &lt;strong&gt;Object Mother&lt;/strong&gt; para mejorar la legibilidad de los tests&lt;/li&gt;
+&lt;/ul&gt;
+&lt;hr&gt;
+&lt;h2 id=&#34;-conceptos-de-ddd-introducidos-en-este-capítulo&#34;&gt;🧩 Conceptos de DDD introducidos en este capítulo&lt;/h2&gt;
+&lt;p&gt;En esta sección &lt;strong&gt;no hablamos de Python&lt;/strong&gt;.
+Solo hablamos de &lt;strong&gt;diseño y dominio&lt;/strong&gt;.&lt;/p&gt;</description>
+    </item>
+    <item>
+      <title>Tests de dominio</title>
       <link>http://localhost:1313/ddd-fastapi-rentals/curso-ddd-fastapi/test-de-dominio/</link>
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
       <guid>http://localhost:1313/ddd-fastapi-rentals/curso-ddd-fastapi/test-de-dominio/</guid>
@@ -123,6 +149,26 @@ La &lt;strong&gt;Application Layer&lt;/strong&gt; no contiene reglas de negocio,
 &lt;/ul&gt;
 &lt;blockquote&gt;
 &lt;p&gt;Objetivo del capítulo: saber &lt;strong&gt;dónde poner cada cosa&lt;/strong&gt; y evitar sistemas caóticos.&lt;/p&gt;</description>
+    </item>
+    <item>
+      <title>Casos de uso</title>
+      <link>http://localhost:1313/ddd-fastapi-rentals/curso-ddd-fastapi/casos-de-uso/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      <guid>http://localhost:1313/ddd-fastapi-rentals/curso-ddd-fastapi/casos-de-uso/</guid>
+      <description>&lt;hr&gt;
+&lt;blockquote&gt;
+&lt;p&gt;En este capítulo damos el paso clave entre &lt;strong&gt;el dominio&lt;/strong&gt; y &lt;strong&gt;la aplicación real&lt;/strong&gt;.
+Aprendemos a expresar &lt;strong&gt;qué quiere hacer el sistema&lt;/strong&gt;, sin mezclar negocio, framework ni persistencia.&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;Este capítulo está diseñado para alguien que &lt;strong&gt;no conoce ni DDD ni Python&lt;/strong&gt;, pero ya entiende:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;qué es una Entidad&lt;/li&gt;
+&lt;li&gt;qué es un Value Object&lt;/li&gt;
+&lt;li&gt;qué es un test de dominio&lt;/li&gt;
+&lt;/ul&gt;
+&lt;hr&gt;
+&lt;h2 id=&#34;-objetivo-del-capítulo&#34;&gt;🎯 Objetivo del capítulo&lt;/h2&gt;
+&lt;p&gt;Al terminar este capítulo serás capaz de:&lt;/p&gt;</description>
     </item>
   </channel>
 </rss>

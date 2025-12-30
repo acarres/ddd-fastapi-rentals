@@ -1,0 +1,442 @@
+<!DOCTYPE html>
+<html lang="en" dir="auto" data-theme="auto">
+
+<head><script src="/ddd-fastapi-rentals/livereload.js?mindelay=10&amp;v=2&amp;port=1313&amp;path=ddd-fastapi-rentals/livereload" data-no-instant defer></script><meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<meta name="robots" content="noindex, nofollow">
+<title>Casos de uso | Blog de acarres</title>
+<meta name="keywords" content="">
+<meta name="description" content="
+
+En este capítulo damos el paso clave entre el dominio y la aplicación real.
+Aprendemos a expresar qué quiere hacer el sistema, sin mezclar negocio, framework ni persistencia.
+
+Este capítulo está diseñado para alguien que no conoce ni DDD ni Python, pero ya entiende:
+
+qué es una Entidad
+qué es un Value Object
+qué es un test de dominio
+
+
+🎯 Objetivo del capítulo
+Al terminar este capítulo serás capaz de:">
+<meta name="author" content="">
+<link rel="canonical" href="http://localhost:1313/ddd-fastapi-rentals/curso-ddd-fastapi/casos-de-uso/">
+<link crossorigin="anonymous" href="/ddd-fastapi-rentals/assets/css/stylesheet.343cc480b9ffc8f04ccbe5e968ad674880cab773ec19905e93033065c1e7a804.css" integrity="sha256-NDzEgLn/yPBMy&#43;XpaK1nSIDKt3PsGZBekwMwZcHnqAQ=" rel="preload stylesheet" as="style">
+<link rel="icon" href="http://localhost:1313/ddd-fastapi-rentals/favicon.ico">
+<link rel="icon" type="image/png" sizes="16x16" href="http://localhost:1313/ddd-fastapi-rentals/favicon-16x16.png">
+<link rel="icon" type="image/png" sizes="32x32" href="http://localhost:1313/ddd-fastapi-rentals/favicon-32x32.png">
+<link rel="apple-touch-icon" href="http://localhost:1313/ddd-fastapi-rentals/apple-touch-icon.png">
+<link rel="mask-icon" href="http://localhost:1313/ddd-fastapi-rentals/safari-pinned-tab.svg">
+<meta name="theme-color" content="#2e2e33">
+<meta name="msapplication-TileColor" content="#2e2e33">
+<link rel="alternate" hreflang="en" href="http://localhost:1313/ddd-fastapi-rentals/curso-ddd-fastapi/casos-de-uso/">
+<noscript>
+    <style>
+        #theme-toggle,
+        .top-link {
+            display: none;
+        }
+
+    </style>
+    <style>
+        @media (prefers-color-scheme: dark) {
+            :root {
+                --theme: rgb(29, 30, 32);
+                --entry: rgb(46, 46, 51);
+                --primary: rgb(218, 218, 219);
+                --secondary: rgb(155, 156, 157);
+                --tertiary: rgb(65, 66, 68);
+                --content: rgb(196, 196, 197);
+                --code-block-bg: rgb(46, 46, 51);
+                --code-bg: rgb(55, 56, 62);
+                --border: rgb(51, 51, 51);
+                color-scheme: dark;
+            }
+
+            .list {
+                background: var(--theme);
+            }
+
+            .toc {
+                background: var(--entry);
+            }
+        }
+
+        @media (prefers-color-scheme: light) {
+            .list::-webkit-scrollbar-thumb {
+                border-color: var(--code-bg);
+            }
+        }
+
+    </style>
+</noscript>
+<script>
+    if (localStorage.getItem("pref-theme") === "dark") {
+        document.querySelector("html").dataset.theme = 'dark';
+    } else if (localStorage.getItem("pref-theme") === "light") {
+       document.querySelector("html").dataset.theme = 'light';
+    } else if (window.matchMedia('(prefers-color-scheme: dark)').matches) {
+        document.querySelector("html").dataset.theme = 'dark';
+    } else {
+        document.querySelector("html").dataset.theme = 'light';
+    }
+
+</script>
+</head>
+<body id="top">
+    <header class="header">
+    <nav class="nav">
+        <div class="logo">
+            <a href="http://localhost:1313/ddd-fastapi-rentals/" accesskey="h" title="Blog de acarres (Alt + H)">Blog de acarres</a>
+            <div class="logo-switches">
+                <button id="theme-toggle" accesskey="t" title="(Alt + T)" aria-label="Toggle theme">
+                    <svg id="moon" xmlns="http://www.w3.org/2000/svg" width="24" height="18" viewBox="0 0 24 24"
+                        fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                        stroke-linejoin="round">
+                        <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+                    </svg>
+                    <svg id="sun" xmlns="http://www.w3.org/2000/svg" width="24" height="18" viewBox="0 0 24 24"
+                        fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                        stroke-linejoin="round">
+                        <circle cx="12" cy="12" r="5"></circle>
+                        <line x1="12" y1="1" x2="12" y2="3"></line>
+                        <line x1="12" y1="21" x2="12" y2="23"></line>
+                        <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+                        <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+                        <line x1="1" y1="12" x2="3" y2="12"></line>
+                        <line x1="21" y1="12" x2="23" y2="12"></line>
+                        <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+                        <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+                    </svg>
+                </button>
+            </div>
+        </div>
+        <ul id="menu">
+            <li>
+                <a href="http://localhost:1313/ddd-fastapi-rentals/curso-ddd-fastapi/" title="Currso DDD y Python con Fastapi">
+                    <span>Currso DDD y Python con Fastapi</span>
+                </a>
+            </li>
+        </ul>
+    </nav>
+</header>
+<main class="main">
+
+<article class="post-single">
+  <header class="post-header">
+    <div class="breadcrumbs"><a href="http://localhost:1313/ddd-fastapi-rentals/">Home</a>&nbsp;»&nbsp;<a href="http://localhost:1313/ddd-fastapi-rentals/curso-ddd-fastapi/">Curso DDD con FastAPI</a></div>
+    <h1 class="post-title entry-hint-parent">
+      Casos de uso
+    </h1>
+    <div class="post-meta">
+
+</div>
+  </header> 
+  <div class="post-content"><hr>
+<blockquote>
+<p>En este capítulo damos el paso clave entre <strong>el dominio</strong> y <strong>la aplicación real</strong>.
+Aprendemos a expresar <strong>qué quiere hacer el sistema</strong>, sin mezclar negocio, framework ni persistencia.</p>
+</blockquote>
+<p>Este capítulo está diseñado para alguien que <strong>no conoce ni DDD ni Python</strong>, pero ya entiende:</p>
+<ul>
+<li>qué es una Entidad</li>
+<li>qué es un Value Object</li>
+<li>qué es un test de dominio</li>
+</ul>
+<hr>
+<h2 id="-objetivo-del-capítulo">🎯 Objetivo del capítulo<a hidden class="anchor" aria-hidden="true" href="#-objetivo-del-capítulo">#</a></h2>
+<p>Al terminar este capítulo serás capaz de:</p>
+<ul>
+<li>Entender qué es un <strong>caso de uso</strong></li>
+<li>Entender cuando usar DTO y cuando no</li>
+<li>Saber por qué el Application Layer existe</li>
+<li>Diferenciar <strong>intención</strong> de <strong>ejecución</strong></li>
+<li>Implementar un primer caso de uso en Python</li>
+<li>Ver cómo el dominio se usa sin ser modificado</li>
+</ul>
+<hr>
+<h2 id="-conceptos-de-ddd-introducidos-en-este-capítulo">🧩 Conceptos de DDD introducidos en este capítulo<a hidden class="anchor" aria-hidden="true" href="#-conceptos-de-ddd-introducidos-en-este-capítulo">#</a></h2>
+<p>En esta sección <strong>no hablamos de Python</strong>.
+Solo hablamos de <strong>arquitectura y responsabilidades</strong>.</p>
+<hr>
+<h3 id="qué-es-un-caso-de-uso">Qué es un caso de uso<a hidden class="anchor" aria-hidden="true" href="#qué-es-un-caso-de-uso">#</a></h3>
+<p>Un <strong>caso de uso</strong> representa una <strong>intención del usuario o del sistema</strong>.</p>
+<p>Ejemplos:</p>
+<ul>
+<li>crear una reserva</li>
+<li>cancelar una reserva</li>
+<li>finalizar una reserva</li>
+</ul>
+<p>Un caso de uso:</p>
+<ul>
+<li>describe <strong>qué se quiere hacer</strong></li>
+<li>orquesta objetos del dominio</li>
+<li>no contiene reglas de negocio complejas</li>
+</ul>
+<hr>
+<h3 id="qué-no-es-un-caso-de-uso">Qué NO es un caso de uso<a hidden class="anchor" aria-hidden="true" href="#qué-no-es-un-caso-de-uso">#</a></h3>
+<p>Un caso de uso NO es:</p>
+<ul>
+<li>un controlador HTTP</li>
+<li>un endpoint</li>
+<li>una clase de dominio</li>
+<li>una consulta a base de datos</li>
+</ul>
+<p>El caso de uso <strong>no sabe</strong>:</p>
+<ul>
+<li>cómo llega la petición</li>
+<li>cómo se guarda en la base de datos</li>
+<li>cómo se devuelve la respuesta</li>
+</ul>
+<hr>
+<h3 id="application-layer-como-orquestador">Application Layer como orquestador<a hidden class="anchor" aria-hidden="true" href="#application-layer-como-orquestador">#</a></h3>
+<p>El Application Layer:</p>
+<ul>
+<li>coordina el dominio</li>
+<li>ejecuta casos de uso</li>
+<li>gestiona transacciones</li>
+</ul>
+<p>Pero:</p>
+<ul>
+<li>no contiene reglas de negocio</li>
+<li>no conoce detalles técnicos</li>
+</ul>
+<hr>
+<h2 id="-conceptos-de-python-introducidos-en-este-capítulo">🐍 Conceptos de Python introducidos en este capítulo<a hidden class="anchor" aria-hidden="true" href="#-conceptos-de-python-introducidos-en-este-capítulo">#</a></h2>
+<p>En esta sección <strong>no hablamos de negocio</strong>.
+Solo explicamos <strong>el lenguaje Python</strong>.</p>
+<hr>
+<h3 id="clases-de-servicio-simples">Clases de servicio simples<a hidden class="anchor" aria-hidden="true" href="#clases-de-servicio-simples">#</a></h3>
+<p>En Python, un caso de uso suele representarse como una <strong>clase con un método público</strong>.</p>
+<p>No es un &ldquo;service&rdquo; genérico.
+Es una clase que representa <strong>una acción concreta</strong>.</p>
+<hr>
+<h3 id="métodos-públicos">Métodos públicos<a hidden class="anchor" aria-hidden="true" href="#métodos-públicos">#</a></h3>
+<p>El método público del caso de uso:</p>
+<ul>
+<li>recibe datos de entrada encapsulados en un DTO</li>
+<li>ejecuta la intención</li>
+<li>devuelve un resultado simple (si aplica)</li>
+</ul>
+<hr>
+<h2 id="-aplicación-al-proyecto-ddd--python-juntos">🧱 Aplicación al proyecto (DDD + Python juntos)<a hidden class="anchor" aria-hidden="true" href="#-aplicación-al-proyecto-ddd--python-juntos">#</a></h2>
+<hr>
+<h3 id="estructura-del-application-layer">Estructura del Application Layer<a hidden class="anchor" aria-hidden="true" href="#estructura-del-application-layer">#</a></h3>
+<pre tabindex="0"><code>src/
+  rentals/
+    booking/
+      application/
+        /request
+          create_booking_request.py
+        create_booking.py
+</code></pre><p>Cada fichero representa <strong>un caso de uso</strong>.</p>
+<p>Como parámetro de entrada, vamos a tener un <strong>DTO</strong> que encapsula los parámetros necesarios</p>
+<p>Como parametros de salida, la regla es:</p>
+<ul>
+<li>Si cruzas un boundary (API ↔ Application) y devuelves más de un valor o quieres un contrato estable
+<ul>
+<li>✅ Output DTO</li>
+</ul>
+</li>
+<li>Si el caso de uso devuelve un único valor simple (p. ej. UUID) y te vale como contrato
+<ul>
+<li>✅ puedes devolver el valor directamente sin DTO.</li>
+</ul>
+</li>
+</ul>
+<hr>
+<h3 id="cómo-queda-la-comunicación-correcta">Cómo queda la comunicación “correcta”<a hidden class="anchor" aria-hidden="true" href="#cómo-queda-la-comunicación-correcta">#</a></h3>
+<p>✅ <strong>API → Application</strong>
+- API recibe CreateBookingRequest (DTO)
+- Lo convierte a tipos del dominio o a un input del caso de uso</p>
+<p>✅ <strong>Application → API</strong>
+- Application devuelve CreateBookingResult (DTO de salida) o algo simple (booking_id)
+- API decide cómo responder (201 + Location + body)</p>
+<hr>
+<h2 id="-caso-de-uso-crear-una-reserva">🧭 Caso de uso: Crear una reserva<a hidden class="anchor" aria-hidden="true" href="#-caso-de-uso-crear-una-reserva">#</a></h2>
+<h3 id="intención">Intención<a hidden class="anchor" aria-hidden="true" href="#intención">#</a></h3>
+<blockquote>
+<p>&ldquo;Quiero crear una reserva con un rango de fechas&rdquo;</p>
+</blockquote>
+<p>No decimos:</p>
+<ul>
+<li>cómo llega la petición</li>
+<li>cómo se guarda</li>
+<li>cómo se devuelve</li>
+</ul>
+<p>Solo expresamos la intención.</p>
+<hr>
+<h3 id="implementación-del-dto-request">Implementación del DTO (Request)<a hidden class="anchor" aria-hidden="true" href="#implementación-del-dto-request">#</a></h3>
+<pre tabindex="0"><code>from datetime import date
+
+
+class CreateBookingRequest:
+    def __init__(self, start_date: date, end_date: date):
+        self.start_date = start_date
+        self.end_date = end_date
+</code></pre><h3 id="implementación-del-caso-de-uso">Implementación del caso de uso<a hidden class="anchor" aria-hidden="true" href="#implementación-del-caso-de-uso">#</a></h3>
+<pre tabindex="0"><code>from datetime import date
+from uuid import UUID
+
+from rentals.booking.domain.booking import Booking
+from shared.domain.value_objects.date_range import DateRange
+from rentals.booking.application.request.create_booking_request import CreateBookingRequest
+
+
+class CreateBooking:
+    def execute(self, request: CreateBookingRequest) -&gt; UUID:
+        date_range = DateRange(request.start_date, request.end_date)
+        booking = Booking.create(date_range)
+
+        return booking.id
+</code></pre><p>Este caso de uso:</p>
+<ul>
+<li>crea los objetos necesarios</li>
+<li>usa el dominio</li>
+<li>no persiste nada todavía</li>
+<li>devuelve solo el identificador</li>
+</ul>
+<hr>
+<h2 id="-decisiones-importantes-explicadas">🧠 Decisiones importantes (explicadas)<a hidden class="anchor" aria-hidden="true" href="#-decisiones-importantes-explicadas">#</a></h2>
+<h3 id="por-qué-el-caso-de-uso-devuelve-solo-el-id">Por qué el caso de uso devuelve solo el ID<a hidden class="anchor" aria-hidden="true" href="#por-qué-el-caso-de-uso-devuelve-solo-el-id">#</a></h3>
+<p>El caso de uso <strong>no devuelve el aggregate completo</strong>.</p>
+<p>Devuelve:</p>
+<ul>
+<li>el identificador de la entidad creada</li>
+</ul>
+<p>Esto es importante porque:</p>
+<ul>
+<li>evita acoplar escritura y lectura</li>
+<li>prepara el camino para CQRS</li>
+<li>permite APIs limpias</li>
+</ul>
+<p>Este tema se desarrollará en profundidad en capítulos posteriores.</p>
+<hr>
+<h2 id="-qué-no-estamos-haciendo-todavía">🧭 Qué NO estamos haciendo todavía<a hidden class="anchor" aria-hidden="true" href="#-qué-no-estamos-haciendo-todavía">#</a></h2>
+<p>En este capítulo <strong>intencionadamente NO introducimos</strong>:</p>
+<ul>
+<li>repositorios</li>
+<li>unit of work</li>
+<li>transacciones</li>
+<li>CQRS</li>
+</ul>
+<p>Primero necesitamos entender <strong>la intención</strong>.</p>
+<hr>
+<h2 id="-qué-hemos-aprendido">🧠 Qué hemos aprendido<a hidden class="anchor" aria-hidden="true" href="#-qué-hemos-aprendido">#</a></h2>
+<ul>
+<li>Un caso de uso representa una intención</li>
+<li>El Application Layer orquesta el dominio</li>
+<li>El dominio no depende de la aplicación</li>
+<li>Los casos de uso no son controladores</li>
+</ul>
+<hr>
+<h2 id="-check-final">✅ Check final<a hidden class="anchor" aria-hidden="true" href="#-check-final">#</a></h2>
+<p>Antes de continuar deberías poder explicar:</p>
+<ul>
+<li>qué es un caso de uso</li>
+<li>qué problema resuelve el Application Layer</li>
+<li>por qué el dominio no depende de la aplicación</li>
+<li>por qué el caso de uso devuelve solo un ID</li>
+</ul>
+<hr>
+<p>En el siguiente capítulo veremos cómo <strong>persistir</strong> lo que hemos creado:</p>
+<p>➡️ <strong>3.3 — Tests de Application Layer</strong></p>
+
+
+  </div>
+
+  <footer class="post-footer">
+    <ul class="post-tags">
+    </ul>
+<nav class="paginav">
+  <a class="prev" href="http://localhost:1313/ddd-fastapi-rentals/curso-ddd-fastapi/que-es-application-layer/">
+    <span class="title">« Prev</span>
+    <br>
+    <span>Application Layer: qué es y qué no es</span>
+  </a>
+</nav>
+
+  </footer>
+</article>
+    </main>
+    
+<footer class="footer">
+        <span>&copy; 2025 <a href="http://localhost:1313/ddd-fastapi-rentals/">Blog de acarres</a></span> · 
+
+    <span>
+        Powered by
+        <a href="https://gohugo.io/" rel="noopener noreferrer" target="_blank">Hugo</a> &
+        <a href="https://github.com/adityatelange/hugo-PaperMod/" rel="noopener" target="_blank">PaperMod</a>
+    </span>
+</footer>
+<a href="#top" aria-label="go to top" title="Go to Top (Alt + G)" class="top-link" id="top-link" accesskey="g">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 12 6" fill="currentColor">
+        <path d="M12 6H0l6-6z" />
+    </svg>
+</a>
+
+<script>
+    let menu = document.getElementById('menu');
+    if (menu) {
+        
+        const scrollPosition = localStorage.getItem("menu-scroll-position");
+        if (scrollPosition) {
+            menu.scrollLeft = parseInt(scrollPosition, 10);
+        }
+        
+        menu.onscroll = function () {
+            localStorage.setItem("menu-scroll-position", menu.scrollLeft);
+        }
+    }
+
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+        anchor.addEventListener("click", function (e) {
+            e.preventDefault();
+            var id = this.getAttribute("href").substr(1);
+            if (!window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+                document.querySelector(`[id='${decodeURIComponent(id)}']`).scrollIntoView({
+                    behavior: "smooth"
+                });
+            } else {
+                document.querySelector(`[id='${decodeURIComponent(id)}']`).scrollIntoView();
+            }
+            if (id === "top") {
+                history.replaceState(null, null, " ");
+            } else {
+                history.pushState(null, null, `#${id}`);
+            }
+        });
+    });
+
+</script>
+<script>
+    var mybutton = document.getElementById("top-link");
+    window.onscroll = function () {
+        if (document.body.scrollTop > 800 || document.documentElement.scrollTop > 800) {
+            mybutton.style.visibility = "visible";
+            mybutton.style.opacity = "1";
+        } else {
+            mybutton.style.visibility = "hidden";
+            mybutton.style.opacity = "0";
+        }
+    };
+
+</script>
+<script>
+    document.getElementById("theme-toggle").addEventListener("click", () => {
+        const html = document.querySelector("html");
+        if (html.dataset.theme === "dark") {
+            html.dataset.theme = 'light';
+            localStorage.setItem("pref-theme", 'light');
+        } else {
+            html.dataset.theme = 'dark';
+            localStorage.setItem("pref-theme", 'dark');
+        }
+    })
+
+</script>
+</body>
+
+</html>
