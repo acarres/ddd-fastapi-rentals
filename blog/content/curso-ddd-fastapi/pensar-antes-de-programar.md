@@ -199,5 +199,3 @@ Ejemplo:
 * **Dominio**: conjunto de reglas y conceptos del negocio
 * **DDD**: forma de diseñar software centrada en el dominio
 * **Lenguaje Ubicuo**: vocabulario compartido entre negocio y código
-
----

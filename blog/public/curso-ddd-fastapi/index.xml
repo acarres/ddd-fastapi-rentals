@@ -131,8 +131,6 @@ Solo hablamos de &lt;strong&gt;diseño y dominio&lt;/strong&gt;.&lt;/p&gt;</desc
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
       <guid>http://localhost:1313/ddd-fastapi-rentals/curso-ddd-fastapi/que-es-application-layer/</guid>
       <description>&lt;hr&gt;
-&lt;h1 id=&#34;31--application-layer-qué-es-y-qué-no-es&#34;&gt;3.1 — Application Layer: qué es y qué no es&lt;/h1&gt;
-&lt;h2 id=&#34;-bloque-3--application-layer&#34;&gt;🧭 Bloque 3 — Application Layer&lt;/h2&gt;
 &lt;blockquote&gt;
 &lt;p&gt;En este capítulo introducimos una de las capas más mal entendidas del software.
 La &lt;strong&gt;Application Layer&lt;/strong&gt; no contiene reglas de negocio, pero sin ella el sistema no funciona.&lt;/p&gt;

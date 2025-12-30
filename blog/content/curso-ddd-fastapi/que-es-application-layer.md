@@ -4,10 +4,6 @@ title: "Application Layer: qué es y qué no es"
 weight: 5
 ----------
 
-# 3.1 — Application Layer: qué es y qué no es
-
-## 🧭 Bloque 3 — Application Layer
-
 > En este capítulo introducimos una de las capas más mal entendidas del software.
 > La **Application Layer** no contiene reglas de negocio, pero sin ella el sistema no funciona.
 
@@ -182,9 +178,7 @@ Eso es dominio.
 
 Antes de continuar, deberías poder decir:
 
-* [ ] Entiendo qué es la Application Layer
-* [ ] Sé qué responsabilidades tiene
-* [ ] Sé qué cosas NO deben ir aquí
-* [ ] Entiendo la diferencia entre dominio y aplicación
-
----
+* Entiendo qué es la Application Layer
+* Sé qué responsabilidades tiene
+* Sé qué cosas NO deben ir aquí
+* Entiendo la diferencia entre dominio y aplicación

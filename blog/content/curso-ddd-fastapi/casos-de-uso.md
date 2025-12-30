@@ -20,8 +20,8 @@ Este capítulo está diseñado para alguien que **no conoce ni DDD ni Python**, 
 Al terminar este capítulo serás capaz de:
 
 * Entender qué es un **caso de uso**
-* Entender cuando usar DTO y cuando no
-* Saber por qué el Application Layer existe
+* Entender **cuándo usar DTO y cuándo no**
+* Saber por qué el **Application Layer** existe
 * Diferenciar **intención** de **ejecución**
 * Implementar un primer caso de uso en Python
 * Ver cómo el dominio se usa sin ser modificado
@@ -72,16 +72,44 @@ El caso de uso **no sabe**:
 
 ### Application Layer como orquestador
 
-El Application Layer:
+El **Application Layer**:
 
 * coordina el dominio
 * ejecuta casos de uso
-* gestiona transacciones
+* define fronteras claras
 
 Pero:
 
 * no contiene reglas de negocio
 * no conoce detalles técnicos
+
+---
+
+### DTO como frontera de entrada
+
+Un **DTO (Data Transfer Object)** representa los **datos de entrada o salida** de un caso de uso.
+
+En este curso:
+
+* el DTO **no es dominio**
+* no protege invariantes
+* no contiene lógica
+* solo expresa la **intención del cliente**
+
+> El dominio **no conoce** los DTOs.
+
+---
+
+### DTO de entrada vs DTO de salida
+
+La regla que seguiremos es:
+
+* Si cruzas un boundary (API ↔ Application) y devuelves **más de un valor** o quieres un contrato estable
+
+  * ✅ usa un **DTO de salida**
+* Si el caso de uso devuelve un único valor simple (por ejemplo un `UUID`)
+
+  * ✅ puedes devolver ese valor directamente
 
 ---
 
@@ -101,13 +129,25 @@ Es una clase que representa **una acción concreta**.
 
 ---
 
-### Métodos públicos
+### `@dataclass`
 
-El método público del caso de uso:
+`@dataclass` permite definir clases simples sin escribir código repetitivo.
 
-* recibe datos de entrada encapsulados en un DTO
-* ejecuta la intención
-* devuelve un resultado simple (si aplica)
+En este capítulo lo usamos para:
+
+* definir DTOs
+* dejar claro que son solo datos
+
+---
+
+### `frozen=True`
+
+Hace que el objeto sea **inmutable**.
+
+Esto es importante porque:
+
+* un DTO no debería cambiar una vez creado
+* evita efectos secundarios
 
 ---
 
@@ -122,35 +162,13 @@ src/
   rentals/
     booking/
       application/
-        /request
-          create_booking_request.py
         create_booking.py
+        create_booking_request.py
 ```
 
-Cada fichero representa **un caso de uso**.
-
-Como parámetro de entrada, vamos a tener un **DTO** que encapsula los parámetros necesarios
-
-Como parametros de salida, la regla es:
-
-- Si cruzas un boundary (API ↔ Application) y devuelves más de un valor o quieres un contrato estable
-  - ✅ Output DTO
-- Si el caso de uso devuelve un único valor simple (p. ej. UUID) y te vale como contrato
-  - ✅ puedes devolver el valor directamente sin DTO.
-  
----
-### Cómo queda la comunicación “correcta”
-✅ **API → Application**
-    - API recibe CreateBookingRequest (DTO)
-    - Lo convierte a tipos del dominio o a un input del caso de uso
-
-✅ **Application → API**
-    - Application devuelve CreateBookingResult (DTO de salida) o algo simple (booking_id)
-    - API decide cómo responder (201 + Location + body)
-
+Cada fichero representa **una responsabilidad clara**.
 
 ---
-
 
 ## 🧭 Caso de uso: Crear una reserva
 
@@ -168,30 +186,46 @@ Solo expresamos la intención.
 
 ---
 
-### Implementación del DTO (Request)
-```
+### Implementación del DTO de entrada
+
+```python
+from dataclasses import dataclass
 from datetime import date
 
 
+@dataclass(frozen=True)
 class CreateBookingRequest:
-    def __init__(self, start_date: date, end_date: date):
-        self.start_date = start_date
-        self.end_date = end_date
+    start_date: date
+    end_date: date
 ```
+
+Este DTO:
+
+* vive en Application Layer
+* no contiene lógica
+* no valida reglas de negocio
+
+---
+
 ### Implementación del caso de uso
 
-```
-from datetime import date
+```python
 from uuid import UUID
 
 from rentals.booking.domain.booking import Booking
 from shared.domain.value_objects.date_range import DateRange
-from rentals.booking.application.request.create_booking_request import CreateBookingRequest
+from rentals.booking.application.create_booking_request import CreateBookingRequest
 
 
 class CreateBooking:
     def execute(self, request: CreateBookingRequest) -> UUID:
-        date_range = DateRange(request.start_date, request.end_date)
+        date_range = DateRange(
+            request.start_date,
+            request.end_date,
+        )
+
+        # Nota: por ahora el ID se genera dentro del dominio.
+        # Más adelante veremos otras estrategias (client-generated IDs, CQRS).
         booking = Booking.create(date_range)
 
         return booking.id
@@ -243,8 +277,8 @@ Primero necesitamos entender **la intención**.
 
 * Un caso de uso representa una intención
 * El Application Layer orquesta el dominio
+* Los DTOs definen fronteras claras
 * El dominio no depende de la aplicación
-* Los casos de uso no son controladores
 
 ---
 
@@ -253,12 +287,6 @@ Primero necesitamos entender **la intención**.
 Antes de continuar deberías poder explicar:
 
 * qué es un caso de uso
-* qué problema resuelve el Application Layer
-* por qué el dominio no depende de la aplicación
+* cuándo usar un DTO
+* por qué un DTO no es dominio
 * por qué el caso de uso devuelve solo un ID
-
----
-
-En el siguiente capítulo veremos cómo **persistir** lo que hemos creado:
-
-➡️ **3.3 — Tests de Application Layer**
