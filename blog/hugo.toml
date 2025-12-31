@@ -4,7 +4,7 @@ title = "Blog de acarres"
 theme = "PaperMod"
 
 [[menu.main]]
-name = "Currso DDD y Python con Fastapi"
+name = "Curso DDD con FastAPI"
 url = "/curso-ddd-fastapi/"
 weight = 1
 

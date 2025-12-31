@@ -74,10 +74,40 @@ Vamos a asegurarnos de que &lt;strong&gt;el entorno no sea un problema&lt;/stron
 Solo hablamos de &lt;strong&gt;modelado del dominio&lt;/strong&gt;.&lt;/p&gt;</description>
     </item>
     <item>
-      <title>Tests de dominio</title>
+      <title>Domain Services</title>
       <link>http://localhost:1313/ddd-fastapi-rentals/curso-ddd-fastapi/test-de-dominio/</link>
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
       <guid>http://localhost:1313/ddd-fastapi-rentals/curso-ddd-fastapi/test-de-dominio/</guid>
+      <description>&lt;blockquote&gt;
+&lt;p&gt;En este capítulo introducimos los &lt;strong&gt;Domain Services&lt;/strong&gt;:&lt;br&gt;
+lógica de negocio que &lt;strong&gt;no pertenece claramente a una Entidad ni a un Value Object&lt;/strong&gt;, pero &lt;strong&gt;sí forma parte del dominio&lt;/strong&gt;.&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;Este capítulo está diseñado para alguien que &lt;strong&gt;no conoce DDD ni Python&lt;/strong&gt;, pero ya entiende:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;qué es una Entidad&lt;/li&gt;
+&lt;li&gt;qué es un Value Object&lt;/li&gt;
+&lt;li&gt;qué es una invariante&lt;/li&gt;
+&lt;/ul&gt;
+&lt;hr&gt;
+&lt;h2 id=&#34;-objetivo-del-capítulo&#34;&gt;🎯 Objetivo del capítulo&lt;/h2&gt;
+&lt;p&gt;Al terminar este capítulo serás capaz de:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;Entender &lt;strong&gt;cuándo aparece un Domain Service&lt;/strong&gt;&lt;/li&gt;
+&lt;li&gt;Saber &lt;strong&gt;cuándo NO usarlo&lt;/strong&gt;&lt;/li&gt;
+&lt;li&gt;Modelar reglas de negocio que cruzan varios conceptos&lt;/li&gt;
+&lt;li&gt;Implementar un Domain Service en Python&lt;/li&gt;
+&lt;li&gt;Preparar el terreno para testearlo en el siguiente capítulo&lt;/li&gt;
+&lt;/ul&gt;
+&lt;hr&gt;
+&lt;h2 id=&#34;-conceptos-de-ddd-introducidos-en-este-capítulo&#34;&gt;🧩 Conceptos de DDD introducidos en este capítulo&lt;/h2&gt;
+&lt;p&gt;En esta sección &lt;strong&gt;no hablamos de Python&lt;/strong&gt;.&lt;br&gt;
+Solo hablamos de &lt;strong&gt;modelado del dominio&lt;/strong&gt;.&lt;/p&gt;</description>
+    </item>
+    <item>
+      <title>Servicios de dominio</title>
+      <link>http://localhost:1313/ddd-fastapi-rentals/curso-ddd-fastapi/servicios-de-dominio/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      <guid>http://localhost:1313/ddd-fastapi-rentals/curso-ddd-fastapi/servicios-de-dominio/</guid>
       <description>&lt;hr&gt;
 &lt;blockquote&gt;
 &lt;p&gt;En este capítulo aprendemos a &lt;strong&gt;probar el dominio&lt;/strong&gt;, no el framework ni la base de datos.

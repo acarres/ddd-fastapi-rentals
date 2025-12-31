@@ -8,6 +8,10 @@ class DateRangeMother:
         return DateRange(start=date(2025, 1, 1), end=date(2025, 1, 31))
 
     @staticmethod
+    def one_week() -> DateRange:
+        return DateRange(start=date(2025, 1, 1), end=date(2025, 1, 7))
+
+    @staticmethod
     def invalid() -> DateRange:
         return DateRange(start=date(2025, 1, 31), end=date(2025, 1, 1))
 

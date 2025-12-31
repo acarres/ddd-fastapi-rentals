@@ -15,3 +15,6 @@ class DateRange:
     
     def contains(self, value: date) -> bool:
         return self.start <= value <= self.end
+
+    def days(self) -> int:
+        return (self.end - self.start).days + 1

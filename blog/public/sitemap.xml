@@ -8,13 +8,13 @@
   </url><url>
     <loc>http://localhost:1313/ddd-fastapi-rentals/curso-ddd-fastapi/entidades-value-objects/</loc>
   </url><url>
-    <loc>http://localhost:1313/ddd-fastapi-rentals/curso-ddd-fastapi/test-application-layer/</loc>
-  </url><url>
     <loc>http://localhost:1313/ddd-fastapi-rentals/curso-ddd-fastapi/test-de-dominio/</loc>
   </url><url>
     <loc>http://localhost:1313/ddd-fastapi-rentals/curso-ddd-fastapi/que-es-application-layer/</loc>
   </url><url>
     <loc>http://localhost:1313/ddd-fastapi-rentals/curso-ddd-fastapi/casos-de-uso/</loc>
+  </url><url>
+    <loc>http://localhost:1313/ddd-fastapi-rentals/curso-ddd-fastapi/test-application-layer/</loc>
   </url><url>
     <loc>http://localhost:1313/ddd-fastapi-rentals/</loc>
   </url><url>

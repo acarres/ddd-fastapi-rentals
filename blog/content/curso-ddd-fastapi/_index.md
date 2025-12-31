@@ -17,7 +17,8 @@ También aprovechar para aprender [Hugo](https://gohugo.io/)
 - 🧠 BLOQUE 2 — Modelado del dominio
   - [2.1 - Pensar antes de programar](pensar-antes-de-programar)
   - [2.2 — Entidades y Value Objects](entidades-value-objects)
-  - [2.3 — Test de dominio](test-de-dominio)
+  - [2.3 — Servicios de dominio](servicios-de-dominio)
+  - [2.4 — Test de dominio](test-de-dominio)
 - 🧭 BLOQUE 3 — Application Layer
   - [3.1 — Application Layer: qué es y qué no es](que-es-application-layer)
   - [3.2 — Casos de uso](casos-de-uso)
